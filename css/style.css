@@ -1,0 +1,225 @@
+/*
+ * Author: Muhammad Saqib Sarwar
+ * Website: http://www.960Development.com/
+ */
+ 
+/** CSS Reset http://meyerweb.com/eric/tools/css/reset/ **/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center,dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed,  figure, figcaption, footer, header, hgroup,  menu, nav, output, ruby, section, summary, time, mark, audio, video { margin: 0; padding: 0; border: 0; font-size: 100%;	font: inherit; vertical-align: baseline; } article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {	display: block;} body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } table { border-collapse: collapse; border-spacing: 0; }
+
+/** Base Body Styles **/
+html { height: 100%; width: 100%; }
+body { height: 100%; width: 100%; overflow: hidden; background: #b2ac9d; color: #0D0E20; font: 100% Helvetica, Arial, Verdana, sans-serif;}
+
+h1,h2,h3,h4,h5,h6 { font-weight:bold; }
+h1 { font-size: 3em;}
+h2 { font-size: 2.4em;}
+h3 { font-size: 1.8em;}
+h4 { font-size: 1.4em;}
+h5 { font-size: 1.2em;}
+h6 { font-size: 1em;}
+
+a { text-decoration:none; }
+a:active, a:visited { color: #607890; }
+a:hover { color: #036; }
+
+/** Layout Styles **/
+
+body {
+    background: url("../images/bg.png") repeat;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+#overlay {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    background-color: #35332F;
+    opacity: .64;
+    /*filter: alpha(opacity=64);*/
+    z-index: 9001;
+}
+    #overlayBar {
+        height: 80px;
+        width: 100%;
+        position: absolute;
+        top: 47%;
+        z-index: 9010;
+        background-color: #2C2A31;
+        border: solid #120D1F;
+        border-width: 2px 0px;
+        box-shadow: 0px 0px 6px #000;
+    }
+    #overlayBarStuff {
+        height: 52px;
+        width: 250px;
+        margin: 14px auto;
+    }
+        .overlayButton {
+            height: 52px;
+            width: 52px;
+            margin: 0 8px;
+            float: left;
+            background: url("../images/overlayBarButton_sprite.png") no-repeat;
+        }
+        .overlayButton a {
+            height: 100%;
+            width: 100%;
+            display: block;
+        }
+        #overlayBarLogo {
+            float: left;
+        }
+            #creatorButton {
+                background-position: 0px -104px;
+            }
+            #creatorButton:hover {
+                background-position: 0px -156px;
+            }
+            #solverButton {
+                background-position: 0px 0px;
+            }
+            #solverButton:hover {
+                background-position: 0px -52px;
+            }
+    .tooltip {
+        display: none;
+        position: absolute;
+        width: 100px;
+        text-align: center;
+        background-color: #FFF;
+        font-size: .75em;
+        padding: .6em;
+        border: 2px solid #000;
+        border-radius: 6px;
+    }
+
+.vSpacer {
+    height: 50%;
+    width: 100%;
+    float: left;
+}
+    .vSpacer.main {
+        margin-bottom: -13em;
+    }
+    .vSpacer.logo {
+        margin-bottom: -126px;
+    }
+    /*.vSpacer.overlay {
+        margin-bottom: */
+
+#mainLogo {
+    height: 74px;
+    width: 164px;
+    margin: 0 auto;
+    clear: both;
+    position: relative;
+    background: url("../images/main_logo.png") no-repeat;
+}
+    #mainLogo a {
+        height: 100%;
+        width: 100%;
+        display: block;
+    }
+
+
+#container {
+    width: 100%;
+    height: 26em;
+    position: relative;
+    clear: both;
+}
+
+#leftMenu, #rightMenu {
+    width: 8em;
+    /*height: 256px;*/
+    position: absolute;
+    top: 69px;
+    background-color: #9c97a8;
+    border: 2px solid #000;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.6);
+    display: none;
+    padding: 10px 0;
+}
+    #leftMenu {
+        left: -9em;
+    }
+        #leftMenu button {
+            float: left;
+            margin: 10px 0px 0px 30px;
+        }
+    #rightMenu {
+        right: -9em;
+    }
+        #rightMenu button {
+            float: right;
+            margin: 10px 30px 0px 0px;
+        }
+   
+
+#puzzleInfo {
+    height: 1em;
+    width: 16em;
+    line-height: 1em;
+    margin: 0 auto .4em auto;
+    font-size: 1.5em;
+    
+}
+    #puzzleNumber {
+        float: left;
+        margin-left: -1px;
+    }
+    #puzzleNumber:before {
+        content: 'puzzle #';
+        float: left;
+    }
+    #puzzleDifficulty {
+        float: right;
+    }
+        .difficultyOrbs {
+            height: 20px;
+            width: 20px;
+            margin-left: 3px;
+            float: right;
+            background: url("../images/puzzleDifficulty_sprite.png") no-repeat;
+        }
+            .difficultyOrbs.on {
+                background-position: 0px 0px;
+            }
+            .difficultyOrbs.off {
+                background-position: 0px -20px;
+            }
+
+#puzzle {
+    height: 24em;
+    width: 24em;
+    margin: 0 auto;
+    border: none;
+    border-collapse: collapse;
+    text-align: center;
+}
+    #puzzle td {
+        height: 11%;
+        width: 11%;
+        margin: 0px;
+        padding: 0px;
+        background-color: #FFF;
+        border: 1px solid #0D0E20;
+        font-size: 20px;
+        line-height: 2em;
+    }
+    .r1 { border-top-width: 2px!important; }
+    .r3, .r6, .r9 { border-bottom-width: 2px!important; }
+    .c1 { border-left-width: 2px!important; }
+    .c3, .c6, .c9 { border-right-width: 2px!important; }
+    
+
+
+/** The Magnificent Clearfix: Updated to prevent margin-collapsing on child elements.  mp/bestclearfix **/
+.clearfix:before, .clearfix:after { content: "\0020"; display: block; height: 0; overflow: hidden; }
+.clearfix:after { clear: both; }
+/** Fix clearfix: blueprintcss.lighthouseapp.com/projects/15318/tickets/5-extra-margin-padding-bottom-of-page **/
+.clearfix { zoom: 1; }
