@@ -37,6 +37,7 @@ $(document).ready(function(){
         $("#rightMenu").show().animate({
             right: '-2px',
         });
+        randomShittyPuzzle();
     });
 
     $("#creatorButton").click(function() {

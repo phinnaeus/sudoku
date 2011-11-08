@@ -1,17 +1,21 @@
 // Tyler
 // Chris
-var cell = "";
-var puzzle = genRow();
+//
+function randomShittyPuzzle() {
+    var cell = "";
+    var puzzle = genRow();
 
-for (var i=1; i<10; i++) {
-    for (var j=1; j<10; j++) {
-       if (rands() < 3) {
-           cell = ".r" + i + ".c" + j;
-           $(cell).text(puzzle[j-1]);
-       }       
+    for (var i=1; i<10; i++) {
+        for (var j=1; j<10; j++) {
+            if (rands() < 3) {
+                cell = ".r" + i + ".c" + j + " input";
+                $(cell).val(puzzle[j-1]);
+                $(cell).attr("disabled", "disabled");
+            }       
+        }
+        if (i%3 == 0) puzzle = offset(puzzle,1);
+        puzzle = offset(puzzle,3);
     }
-    if (i%3 == 0) puzzle = offset(puzzle,1);
-    puzzle = offset(puzzle,3);
 }
 
 // solvers
