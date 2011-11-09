@@ -49,7 +49,7 @@ $(document).ready(function(){
         });
     });
 
-    $("#puzzle input").autotab_magic().autotab_filter("numeric")
+    $("#puzzle input").autotab_filter("numeric").autotab_magic();
 	
 	//this function attached focus and blur events with input elements
 	var addFocusAndBlur = function($input, $val){
