@@ -194,16 +194,16 @@ body {
             }
 
 #puzzle {
-    height: 24em;
-    width: 24em;
+    height: 333px;
+    width: 333px;
     margin: 0 auto;
     border: none;
     border-collapse: collapse;
     text-align: center;
 }
     #puzzle td {
-        height: 11%;
-        width: 11%;
+        height: 35px;
+        width: 35px;
         margin: 0px;
         padding: 0px;
         background-color: #FFF;

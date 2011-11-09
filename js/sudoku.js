@@ -4,6 +4,8 @@
 function randomShittyPuzzle() {
     var cell = "";
     var puzzle = genRow();
+    
+    clearPuzzle();
 
     for (var i=1; i<10; i++) {
         for (var j=1; j<10; j++) {
@@ -87,6 +89,11 @@ function nukeItFromOrbit() {
 }
 
 // helpers
+
+function clearPuzzle() {
+    $("#puzzle input").val("").removeAttr("disabled");
+}
+
 
 function genRow() {
     var puzzle = [7,3,1,8,4,2,9,5,6];

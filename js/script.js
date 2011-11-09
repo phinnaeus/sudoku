@@ -1,5 +1,7 @@
 // JavaScript Document
 $(document).ready(function(){
+    
+    clearPuzzle();
 
     jQuery.easing.def = 'easeInExpo';
 
