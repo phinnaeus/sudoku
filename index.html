@@ -24,15 +24,15 @@
     </div>
 
     <div id="container">
-    
+
         <div id="leftMenu">
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">Save</button>
-            <button class="clean-gray">Clear</button>
+            <button>Save</button>
+            <button>Load</button>
+            <button>Print</button>
+            <button onclick="clearPuzzle();">Clear</button>
         </div>
-    
+
+   <div id="middleCol"> 
         <div id="puzzleInfo" >
             <span id="puzzleNumber">00000000</span>
             <span id="puzzleDifficulty">
@@ -42,7 +42,6 @@
                 <span class="difficultyOrbs on">&nbsp;</span>
             </span>
         </div>
-
     <table id="puzzle">
         <tr>
             <td class="r1 c1"><input type="text" maxlength="1" /></td>
@@ -144,20 +143,19 @@
             <td class="r9 c9"><input type="text" maxlength="1" /></td>
         </tr>
     </table>
+    </div>
 
         <div id="rightMenu">
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">test</button>
-            <button class="clean-gray">test</button>
+            <button onclick="randomShittyPuzzle();">Generate</button>
+            <button>Solve</button>
+            <button>Next</button>
+            <button>Possibles</button>
         </div>
 
     </div>
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-	<script type="text/javascript" src="js/jquery.easing-1.3.min.js"></script>
     <script type="text/javascript" src="js/jquery.autotab-1.1b.js"></script>
 		
 	<script type="text/javascript" src="js/script.js"></script>

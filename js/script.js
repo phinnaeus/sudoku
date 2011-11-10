@@ -3,8 +3,6 @@ $(document).ready(function(){
     
     clearPuzzle();
 
-    jQuery.easing.def = 'easeInExpo';
-
     $("#puzzle input").autotab_filter("numeric").autotab_magic();
 	
 	//this function attached focus and blur events with input elements
