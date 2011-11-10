@@ -94,6 +94,56 @@ function clearPuzzle() {
     $("#puzzle input").val("").removeAttr("disabled");
 }
 
+function updateButtons() {
+    var data = $("#puzzle input").val().length;
+    if (data > 0) {
+        showButtons();
+    } else hideButtons();
+}
+
+function showButtons() {
+    $("#leftMenu button.hidden, #rightMenu button.hidden").show();
+}
+
+function hideButtons() {
+    $("#leftMenu button.hidden, #rightMenu button.hidden").hide();
+}
+
+function displayPuzzle(arrPuz) {
+    var cell,value;
+    for (var i=1; i<10; i++) {
+        for (var j=1; j<10; j++) {
+            cell = ".r" + i + ".c" + j + " input";
+            value = arrPuz[i*j];
+            if (value != "0")
+                $(cell).val(arrPuz[i*j]);
+        }
+    }
+}
+
+
+function savePuzzle(key) {
+    var i=0;
+    var puz = new Array(81);
+    $("#puzzle input").each(function() {
+        if (this.value === "") puz[i] = "0";
+        else puz[i] = this.value;
+        i++;
+    });
+    try {
+        localStorage.setItem(key,puz);
+    } catch (e) {
+        if (e == QUOTA_EXCEEDED_ERR) {
+            alert("No more room for puzzles somehow! I'm sorry!");
+        }
+    }
+    return key;
+}
+
+function loadPuzzle(key) {
+    var puzzle = localStorage.getItem(key);
+    return puzzle;
+}
 
 function genRow() {
     var puzzle = [7,3,1,8,4,2,9,5,6];
