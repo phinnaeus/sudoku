@@ -30,7 +30,7 @@ body {
 }
 
 .hidden {
-    opacity: 0;
+   display: none; 
 }
 
 .vSpacer {
@@ -75,19 +75,19 @@ body {
     position: relative;
     background-color: #FFF;
     border: 1px solid #000;
-    padding: 0px 8px 8px 8px;
+    padding: 4px 8px;
 }
     #leftMenu {
     }
         #leftMenu button {
-            float: right;
-            margin: 8px 0px;
+           /* float: right;*/
+            margin: 4px 0px;
         }
     #rightMenu {
     }
         #rightMenu button {
-            float: left;
-            margin: 8px 0px;
+           /* float: left;*/
+            margin: 4px 0px;
         }
 
 #middleCol {

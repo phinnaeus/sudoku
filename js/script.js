@@ -3,7 +3,26 @@ $(document).ready(function(){
     
     clearPuzzle();
 
-    $("#puzzle input").autotab_filter("numeric").autotab_magic();
+//    $("#puzzle input").autotab_filter("numeric").autotab_magic().change(
+//        "updateButtons(this)"
+//    );
+    
+
+    function updateButtons(inputs) {
+        var data = inputs.val().length;
+        if (data > 0) {
+            showButtons();
+        } else hideButtons();
+    }
+
+    function showButtons() {
+        $("#leftMenu button, #rightMenu button").removeClass("hidden");
+    }
+
+    function hideButtons() {
+        $("#leftMenu button, #rightMenu button").addClass("hidden");
+    }
+
 	
 	//this function attached focus and blur events with input elements
 	var addFocusAndBlur = function($input, $val){
