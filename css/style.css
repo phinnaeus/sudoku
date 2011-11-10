@@ -95,11 +95,11 @@ body {
     margin: 0px 8px;
 }
 
-#puzzleInfo {
+.puzzleInfo {
     height: 1em;
     width: 333px;
     line-height: 1em;
-    margin: 0 auto .4em auto;
+    margin: 4px auto;
     font-size: 1.5em;
 }
     #puzzleNumber {
