@@ -16,42 +16,11 @@
     <!-- <link rel="shortcut icon" href="favicon.ico" /> -->
 		
 </head>
-<!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
-<!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
-<!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
-<!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+<body>
 
-    <div id="overlay"></div>
-    <!--<div class="vSpacer overlay"></div>-->
-    <div id="overlayBar">
-        <div id="overlayBarStuff">
-            <div class="overlayButton" id="creatorButton"><a href="#creator">&nbsp;</a>
-
-                <div class="tooltip">
-                    <p>Input your own puzzle, we can help you solve it
-                        one step at a time. Or we can just give you the
-                        answer. Whatever.
-                    </p>
-                </div>
-
-            </div>
-            <img src="images/overlayBar_logo.png" alt="SUDOKU SOLVER" id="overlayBarLogo" />
-            <div class="overlayButton" id="solverButton"><a href="#solver">&nbsp;</a>
-
-                <div class="tooltip">
-                    <p>Let us generate a puzzle for you. Solve it on
-                        your own or use our solving tools to learn.
-                    </p>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    
     <div class="vSpacer main">
         <div class="vSpacer logo"></div>
-        <div id="mainLogo" class="hidden"><a href="#logo">&nbsp;</a></div>
+        <div id="mainLogo"><a href="#logo">&nbsp;</a></div>
     </div>
 
     <div id="container">
@@ -64,7 +33,7 @@
             <button class="clean-gray">Clear</button>
         </div>
     
-        <div id="puzzleInfo" class="hidden">
+        <div id="puzzleInfo" >
             <span id="puzzleNumber">00000000</span>
             <span id="puzzleDifficulty">
                 <span class="difficultyOrbs off">&nbsp;</span>
