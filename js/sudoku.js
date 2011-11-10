@@ -114,9 +114,9 @@ function displayPuzzle(arrPuz) {
     for (var i=1; i<10; i++) {
         for (var j=1; j<10; j++) {
             cell = ".r" + i + ".c" + j + " input";
-            value = arrPuz[i*j];
+            value = arrPuz[(i*j)-1];
             if (value != "0")
-                $(cell).val(arrPuz[i*j]);
+                $(cell).val(arrPuz[(i*j)-1]);
         }
     }
 }
@@ -142,7 +142,7 @@ function savePuzzle(key) {
 
 function loadPuzzle(key) {
     var puzzle = localStorage.getItem(key);
-    return puzzle;
+    return puzzle.split(',');
 }
 
 function genRow() {
