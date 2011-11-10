@@ -18,6 +18,7 @@ function randomShittyPuzzle() {
         if (i%3 == 0) puzzle = offset(puzzle,1);
         puzzle = offset(puzzle,3);
     }
+    updateProgressBar();
 }
 
 // solvers
@@ -92,6 +93,7 @@ function nukeItFromOrbit() {
 
 function clearPuzzle() {
     $("#puzzle input").val("").removeAttr("disabled");
+    updateProgressBar();
 }
 
 function updateButtons() {
@@ -119,10 +121,11 @@ function displayPuzzle(arrPuz) {
                 $(cell).val(arrPuz[(i*j)-1]);
         }
     }
+    updateProgressBar();
 }
 
 
-function savePuzzle(key) {
+function puzzleToArray() {
     var i=0;
     var puz = new Array(81);
     $("#puzzle input").each(function() {
@@ -130,6 +133,10 @@ function savePuzzle(key) {
         else puz[i] = this.value;
         i++;
     });
+    return puz;
+}
+
+function savePuzzle(key, puz) {
     try {
         localStorage.setItem(key,puz);
     } catch (e) {
@@ -143,6 +150,20 @@ function savePuzzle(key) {
 function loadPuzzle(key) {
     var puzzle = localStorage.getItem(key);
     return puzzle.split(',');
+}
+
+function countFilled() {
+    var c=0;
+    $("#puzzle input").each(function() {
+        if (this.value != "") c++;
+    });
+    return c;
+}
+
+function updateProgressBar() {
+    var c = countFilled();
+    $("progress.puzzleInfo").val(c);
+    return c;
 }
 
 function genRow() {
