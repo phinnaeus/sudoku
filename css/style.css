@@ -73,7 +73,7 @@ body {
     float: left;
     margin-top: 80px;
     position: relative;
-    background-color: #FFF;
+    background-color: #D8D8D8;
     border: 1px solid #000;
     padding: 4px 8px;
 }
@@ -151,6 +151,10 @@ body {
             text-align: center;
             font-size: 100%;
         }
+            #puzzle td input[disabled='disabled'] {
+                color: #333;
+                background-color: #DDD;
+            }
     .r1 { border-top-width: 2px!important; }
     .r3, .r6, .r9 { border-bottom-width: 2px!important; }
     .c1 { border-left-width: 2px!important; }
