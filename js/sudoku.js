@@ -18,6 +18,7 @@ function randomShittyPuzzle() {
         if (i%3 == 0) puzzle = offset(puzzle,1);
         puzzle = offset(puzzle,3);
     }
+    updateButtons();
     updateProgressBar();
 }
 
@@ -93,11 +94,12 @@ function nukeItFromOrbit() {
 
 function clearPuzzle() {
     $("#puzzle input").val("").removeAttr("disabled");
+    updateButtons();
     updateProgressBar();
 }
 
 function updateButtons() {
-    var data = $("#puzzle input").val().length;
+    var data = countFilled();
     if (data > 0) {
         showButtons();
     } else hideButtons();
@@ -122,6 +124,7 @@ function displayPuzzle(arrPuz) {
                 $(cell).val(arrPuz[(i*j)-1]);
         }
     }
+    updateButtons();
     updateProgressBar();
 }
 
@@ -137,6 +140,8 @@ function puzzleToArray() {
     return puz;
 }
 
+//TODO: save disabled or not (separate array, 1 if disabled 0 if editable)
+//      implement possibles, (array of strings for each cell)
 function savePuzzle(key, puz) {
     try {
         localStorage.setItem(key,puz);

@@ -2,11 +2,12 @@
 $(document).ready(function(){
     
     clearPuzzle();
-    showButtons();
+//    showButtons();
 
-    $("#puzzle input").autotab_filter("numeric").autotab_magic();
-    
-//    $("#puzzle input").on('change', updateButtons());
+    $("#puzzle input").autotab_filter("numeric").autotab_magic().on('change', function() {
+        updateProgressBar();
+        updateButtons();
+    });
 	
     //this function attached focus and blur events with input elements
 	var addFocusAndBlur = function($input, $val){

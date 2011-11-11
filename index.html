@@ -26,10 +26,10 @@
     <div id="container">
 
         <div id="leftMenu">
-            <button class="hidden" onclick="savePuzzle('test',puzzleToArray());">Save</button>
-            <button onclick="displayPuzzle(loadPuzzle('test'));">Load</button>
-            <button>Print</button>
-            <button class="hidden" onclick="clearPuzzle();">Clear</button>
+            <button class="hidden" onclick="savePuzzle('test',puzzleToArray());"><span class="icon downarrow"></span>Save</button>
+            <button onclick="displayPuzzle(loadPuzzle('test'));"><span class="icon uparrow"></span>Load</button>
+            <button><span class="icon pen"></span>Print</button>
+            <button class="hidden negative" onclick="clearPuzzle();"><span class="icon cross"></span>Clear</button>
         </div>
 
    <div id="middleCol"> 
@@ -149,10 +149,10 @@
     </div>
 
         <div id="rightMenu">
-            <button onclick="randomShittyPuzzle();">Generate</button>
-            <button class="hidden">Solve</button>
-            <button class="hidden">Next</button>
-            <button class="hidden">Possibles</button>
+            <button onclick="randomShittyPuzzle();"><span class="icon plus"></span>New</button>
+            <button class="hidden"><span class="icon rightarrow"></span>Next</button>
+            <button class="hidden"><!--<span class="icon tag"></span>-->Possibles</button>
+            <button class="hidden positive"><span class="icon check"></span>Solve</button>
         </div>
 
     </div>
