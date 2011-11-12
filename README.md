@@ -15,6 +15,15 @@ Methods
     Clears the sudoku board.
 
 * updateButtons
+
+    Shows/hides buttons depending on the state of the puzzle. If
+    the puzzle is empty (void of any numbers) it hides:
+    * Save
+    * Clear
+    * Possibles
+    * Next
+    * Solve
+
 * showButtons
 * hideButtons
 * displayPuzzle
