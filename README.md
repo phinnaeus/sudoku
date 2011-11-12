@@ -4,7 +4,7 @@ A Bit of Documentation
 Methods
 -------
 
-* randomShittyPuzzle
+* **randomShittyPuzzle**
 
     A throwaway method, simply there to generate technically valid
     puzzles. Needs to be replaced. Uses helper methods genRow, 
