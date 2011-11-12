@@ -92,6 +92,45 @@ function nukeItFromOrbit() {
 
 // helpers
 
+//TODO: for each of the highlight methods, pass just row and column of cell.
+//      figure out the rest through magic.
+function highlightRow(row, cell) {
+    clearTableStyles();
+    var rowSelector = "#puzzle .r" + row;
+    var cellSelector = "#puzzle .r" + row + ".c" + cell;
+    $(rowSelector).css({
+        'color':'#000',
+        'background-color':'#9D9EA9',
+    });
+    $(cellSelector).css('background-color','#B2B0A4');
+}
+
+function highlightColumn(col, cell) {
+    clearTableStyles();
+    var colSelector = "#puzzle .c" + col;
+    var cellSelector = "#puzzle .c" + col + ".r" + cell;
+    $(colSelector).css({
+        'color':'#000',
+        'background-color':'#9D9EA9',
+    });
+    $(cellSelector).css('background-color','#B2B0A4');
+}
+
+function highlightBox(box, row, col) {
+    clearTableStyles();
+    var boxSelector = "#puzzle .b" + box;
+    var cellSelector = "#puzzle .r" + row + ".c" + col;
+    $(boxSelector).css({
+        'color':'#000',
+        'background-color':'#9D9EA9',
+    });
+    $(cellSelector).css('background-color','#B2B0A4');
+}
+
+function clearTableStyles() {
+    $("#puzzle td").removeAttr("style");
+}
+
 function clearPuzzle() {
     $("#puzzle input").val("").removeAttr("disabled");
     updateButtons();

@@ -150,10 +150,11 @@ body {
             border: none;
             text-align: center;
             font-size: 100%;
+            background-color: transparent;
         }
             #puzzle td input[disabled='disabled'] {
-                color: #333;
-                background-color: #FFF;
+                color: #111;
+                background-color: transparent;
             }
     .r1 { border-top-width: 2px!important; }
     .r3, .r6, .r9 { border-bottom-width: 2px!important; }
