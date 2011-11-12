@@ -95,7 +95,7 @@ function nukeItFromOrbit() {
 //TODO: for each of the highlight methods, pass just row and column of cell.
 //      figure out the rest through magic.
 function highlightRow(row, cell) {
-    clearTableStyles();
+    clearPuzzleStyles();
     var rowSelector = "#puzzle .r" + row;
     var cellSelector = "#puzzle .r" + row + ".c" + cell;
     $(rowSelector).css({
@@ -106,7 +106,7 @@ function highlightRow(row, cell) {
 }
 
 function highlightColumn(col, cell) {
-    clearTableStyles();
+    clearPuzzleStyles();
     var colSelector = "#puzzle .c" + col;
     var cellSelector = "#puzzle .c" + col + ".r" + cell;
     $(colSelector).css({
@@ -117,7 +117,7 @@ function highlightColumn(col, cell) {
 }
 
 function highlightBox(box, row, col) {
-    clearTableStyles();
+    clearPuzzleStyles();
     var boxSelector = "#puzzle .b" + box;
     var cellSelector = "#puzzle .r" + row + ".c" + col;
     $(boxSelector).css({
@@ -127,12 +127,13 @@ function highlightBox(box, row, col) {
     $(cellSelector).css('background-color','#B2B0A4');
 }
 
-function clearTableStyles() {
+function clearPuzzleStyles() {
     $("#puzzle td").removeAttr("style");
 }
 
 function clearPuzzle() {
     $("#puzzle input").val("").removeAttr("disabled");
+    clearPuzzleStyles();
     updateButtons();
     updateProgressBar();
 }
