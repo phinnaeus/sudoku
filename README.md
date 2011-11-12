@@ -1,8 +1,8 @@
 A Bit of Documentation
 ======================
 
-Methods
--------
+Currently Implemented Methods
+-----------------------------
 
 * **randomShittyPuzzle**
 
@@ -10,11 +10,11 @@ Methods
     puzzles. Needs to be replaced. Uses helper methods genRow, 
     shuffle, rands, and offset.
 
-* clearPuzzle
+* **clearPuzzle**
 
     Clears the sudoku board.
 
-* updateButtons
+* **updateButtons**
 
     Shows/hides buttons depending on the state of the puzzle. If
     the puzzle is empty (void of any numbers) it hides:
@@ -26,40 +26,40 @@ Methods
     As soon as any input is made or numbers are loaded into the
     puzzle it shows the buttons again.
 
-* showButtons
+* **showButtons**
     
     Helper method to show the applicable buttons.
 
-* hideButtons
+* **hideButtons**
     
     Helper method to hide the applicable buttons.
 
-* displayPuzzle
+* **displayPuzzle**
 
     Takes an array of puzzle entries to input. Interprets "0"
     elements as blank spots in the puzzle.
 
-* puzzleToArray
+* **puzzleToArray**
 
     Returns the currently displayed puzzle as an array of 81
     elements.
 
-* savePuzzle
+* **savePuzzle**
     
     Accepts a key string and puzzle array and saves it to
     localStorage. Requires browser support.
 
-* loadPuzzle
+* **loadPuzzle**
 
     Accepts a key string and loads the matching puzzle from
     localStorage, if it exists.
 
-* countFilled
+* **countFilled**
 
     Returns the number of currently filled in squares on the
     puzzle board.
 
-* updateProgressBar
+* **updateProgressBar**
     
     Updates the progress bar displayed (if supported) below the
     puzzle to reflect the percentage of cells completed.
