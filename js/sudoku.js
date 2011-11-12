@@ -92,12 +92,10 @@ function nukeItFromOrbit() {
 
 // helpers
 
-//TODO: for each of the highlight methods, pass just row and column of cell.
-//      figure out the rest through magic.
-function highlightRow(row, cell) {
+function highlightRow(row, col) {
     clearPuzzleStyles();
     var rowSelector = "#puzzle .r" + row;
-    var cellSelector = "#puzzle .r" + row + ".c" + cell;
+    var cellSelector = "#puzzle .r" + row + ".c" + col;
     $(rowSelector).css({
         'color':'#000',
         'background-color':'#9D9EA9',
@@ -105,10 +103,10 @@ function highlightRow(row, cell) {
     $(cellSelector).css('background-color','#B2B0A4');
 }
 
-function highlightColumn(col, cell) {
+function highlightColumn(row, col) {
     clearPuzzleStyles();
     var colSelector = "#puzzle .c" + col;
-    var cellSelector = "#puzzle .c" + col + ".r" + cell;
+    var cellSelector = "#puzzle .c" + col + ".r" + row;
     $(colSelector).css({
         'color':'#000',
         'background-color':'#9D9EA9',
@@ -116,7 +114,8 @@ function highlightColumn(col, cell) {
     $(cellSelector).css('background-color','#B2B0A4');
 }
 
-function highlightBox(box, row, col) {
+function highlightBox(row, col) {
+    var box = (Math.ceil(row/3)-1)*3 + Math.ceil(col/3);
     clearPuzzleStyles();
     var boxSelector = "#puzzle .b" + box;
     var cellSelector = "#puzzle .r" + row + ".c" + col;
