@@ -26,14 +26,14 @@
     <div id="container">
 
         <div id="leftMenu">
-            <button class="hidden" onclick="savePuzzle('test',puzzleToArray());"><span class="icon downarrow"></span>Save</button>
+            <button class="hidden" onclick="savePuzzle('test',puzzleToObject());"><span class="icon downarrow"></span>Save</button>
             <button onclick="displayPuzzle(loadPuzzle('test'));"><span class="icon uparrow"></span>Load</button>
             <button><span class="icon pen"></span>Print</button>
             <button class="hidden negative" onclick="clearPuzzle();"><span class="icon cross"></span>Clear</button>
         </div>
 
    <div id="middleCol"> 
-        <div class="puzzleInfo" >
+        <!--<div class="puzzleInfo" >
             <span id="puzzleNumber">00000000</span>
             <span id="puzzleDifficulty">
                 <span class="difficultyOrbs off">&nbsp;</span>
@@ -41,7 +41,7 @@
                 <span class="difficultyOrbs on">&nbsp;</span>
                 <span class="difficultyOrbs on">&nbsp;</span>
             </span>
-        </div>
+        </div>-->
     <table id="puzzle">
         <tr>
             <td class="r1 c1 b1"><input type="text" maxlength="1" /><span class="possibles">&nbsp;</span></td>

@@ -178,10 +178,9 @@ function displayPuzzle(puz) {
     });
     updateButtons();
     updateProgressBar();
-}
-    
+}    
 
-function puzzleToArray() {
+function puzzleToObject() {
     var i=0;
     var puz = new Array(81);
     var dis = new Array(81);
@@ -273,3 +272,4 @@ Storage.prototype.setObject = function(key, value) {
 Storage.prototype.getObject = function(key, value) {
     return JSON.parse(this.getItem(key));
 }
+
