@@ -156,6 +156,11 @@ body {
                 color: #111;
                 background-color: transparent;
             }
+        .possibles {
+            position: absolute;
+            font-size: 9px;
+            margin-left: -33px;
+        }
     .r1 { border-top-width: 2px!important; }
     .r3, .r6, .r9 { border-bottom-width: 2px!important; }
     .c1 { border-left-width: 2px!important; }

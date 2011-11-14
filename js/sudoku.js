@@ -1,6 +1,3 @@
-// Tyler
-// Chris
-//
 function randomShittyPuzzle() {
     var cell = "";
     var puzzle = genRow();
@@ -9,11 +6,13 @@ function randomShittyPuzzle() {
 
     for (var i=1; i<10; i++) {
         for (var j=1; j<10; j++) {
+            cell = ".r" + i + ".c" + j + " input";
             if (rands() < 3) {
-                cell = ".r" + i + ".c" + j + " input";
                 $(cell).val(puzzle[j-1]);
                 $(cell).attr("disabled", "disabled");
-            }       
+            } else if (rands() < 2) {
+                $(cell).next().text(rands() + " " + rands());
+            }
         }
         if (i%3 == 0) puzzle = offset(puzzle,1);
         puzzle = offset(puzzle,3);
@@ -131,7 +130,7 @@ function clearPuzzleStyles() {
 }
 
 function clearPuzzle() {
-    $("#puzzle input").val("").removeAttr("disabled");
+    $("#puzzle input").val("").removeAttr("disabled").next().text("");
     clearPuzzleStyles();
     updateButtons();
     updateProgressBar();
@@ -152,7 +151,7 @@ function hideButtons() {
     $("#leftMenu button.hidden, #rightMenu button.hidden").hide();
 }
 
-function displayPuzzle(arrPuz) {
+/*function displayPuzzle(arrPuz) {
     clearPuzzle();
     var cell,value;
     for (var i=1; i<10; i++) {
@@ -165,25 +164,43 @@ function displayPuzzle(arrPuz) {
     }
     updateButtons();
     updateProgressBar();
-}
+}*/
 
+function displayPuzzle(puz) {
+    clearPuzzle();
+    $("#puzzle input").each(function(index) {
+        var num = puz.value[index];
+        if (num != "0") $(this).val(num);
+
+        $(this).next().text(puz.possibles[index]);
+        
+        if (puz.isDisabled[index]) $(this).attr("disabled","disabled");
+    });
+    updateButtons();
+    updateProgressBar();
+}
+    
 
 function puzzleToArray() {
     var i=0;
     var puz = new Array(81);
+    var dis = new Array(81);
+    var pos = new Array(81);
     $("#puzzle input").each(function() {
+        pos[i] = this.nextSibling.innerText;
+
+        dis[i] = this.disabled;
+        
         if (this.value === "") puz[i] = "0";
         else puz[i] = this.value;
         i++;
     });
-    return puz;
+    return new Puzzle(puz, dis, pos);
 }
 
-//TODO: save disabled or not (separate array, 1 if disabled 0 if editable)
-//      implement possibles, (array of strings for each cell)
 function savePuzzle(key, puz) {
     try {
-        localStorage.setItem(key,puz);
+        localStorage.setObject(key,puz);
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
             alert("No more room for puzzles somehow! I'm sorry!");
@@ -193,8 +210,9 @@ function savePuzzle(key, puz) {
 }
 
 function loadPuzzle(key) {
-    var puzzle = localStorage.getItem(key);
-    return puzzle.split(',');
+    var puzzle = localStorage.getObject(key);
+    // have to do this to make the thing typeOf Puzzle
+    return new Puzzle(puzzle.value, puzzle.isDisabled, puzzle.possibles);
 }
 
 function countFilled() {
@@ -236,4 +254,22 @@ function offset(a,m) {
         m--;
     } while (m > 0);
     return a;
+}
+
+// Puzzle object constructor
+
+function Puzzle(puz, dis, pos) {
+    this.value = puz;
+    this.isDisabled = dis;
+    this.possibles = pos;
+}
+
+// localStorage only stores strings. Fuck that.
+
+Storage.prototype.setObject = function(key, value) {
+    this.setItem(key, JSON.stringify(value));
+}
+
+Storage.prototype.getObject = function(key, value) {
+    return JSON.parse(this.getItem(key));
 }
