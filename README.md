@@ -1,6 +1,22 @@
 A Bit of Documentation
 ======================
 
+Puzzle Object Prototype
+-----------------------
+
+    function Puzzle(puz, dis, pos) {
+        this.value = puz;
+        this.isDisabled = dis;
+        this.possibles = pos;
+    }
+
+The Puzzle prototype contains 3 arrays, each of size 81: value, 
+disabled, and possibles. Values contains strings of each cells
+current number value, with "0" saved for an empty cell. isDisabled
+contains a boolean value, true if the cell should be immutable.
+Possibles contains strings that go into the uper left of each
+cell, allowing the user to save possible values for each cell.
+
 Currently Implemented Methods
 -----------------------------
 
@@ -10,9 +26,28 @@ Currently Implemented Methods
     puzzles. Needs to be replaced. Uses helper methods genRow, 
     shuffle, rands, and offset.
 
+* **highlightRow**
+
+    Pass a row and column, this function will visually highlight an
+    entire row and the specific cell.
+
+* **highlightColumn**
+
+    Pass a row and column, this function will visually highlight an
+    entire column and the specific cell.
+
+* **highlightBox**
+
+    Same as the above two, but this one higlights the box that the
+    cell is in. I'm proud of this one, it uses MATH.
+
 * **clearPuzzle**
 
     Clears the sudoku board.
+
+* **clearPuzzleStyles**
+
+    Removes any inline style attributes from the puzzle cells.
 
 * **updateButtons**
 
@@ -36,13 +71,12 @@ Currently Implemented Methods
 
 * **displayPuzzle**
 
-    Takes an array of puzzle entries to input. Interprets "0"
-    elements as blank spots in the puzzle.
+    Takes a Puzzle object displayes all included info in relevant
+    place on the board. 
 
-* **puzzleToArray**
+* **puzzleToObject**
 
-    Returns the currently displayed puzzle as an array of 81
-    elements.
+    Returns the currently displayed puzzle as a Puzzle object.
 
 * **savePuzzle**
     
@@ -56,8 +90,8 @@ Currently Implemented Methods
 
 * **countFilled**
 
-    Returns the number of currently filled in squares on the
-    puzzle board.
+    Returns the number of currently filled in squares on the puzzle 
+    board.
 
 * **updateProgressBar**
     
