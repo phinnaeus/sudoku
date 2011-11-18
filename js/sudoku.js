@@ -151,21 +151,6 @@ function hideButtons() {
     $("#leftMenu button.hidden, #rightMenu button.hidden").hide();
 }
 
-/*function displayPuzzle(arrPuz) {
-    clearPuzzle();
-    var cell,value;
-    for (var i=1; i<10; i++) {
-        for (var j=1; j<10; j++) {
-            cell = ".r" + i + ".c" + j + " input";
-            value = arrPuz[(i*j)-1];
-            if (value != "0")
-                $(cell).val(arrPuz[(i*j)-1]);
-        }
-    }
-    updateButtons();
-    updateProgressBar();
-}*/
-
 function displayPuzzle(puz) {
     clearPuzzle();
     $("#puzzle input").each(function(index) {
@@ -186,12 +171,13 @@ function puzzleToObject() {
     var dis = new Array(81);
     var pos = new Array(81);
     $("#puzzle input").each(function() {
-        pos[i] = this.nextSibling.innerText;
+        var num = $(this).val();
+        if (num === "") puz[i] = "0";
+        else puz[i] = num;
 
-        dis[i] = this.disabled;
-        
-        if (this.value === "") puz[i] = "0";
-        else puz[i] = this.value;
+        pos[i] = $(this).next().text();
+
+        dis[i] = $(this).attr("disabled");
         i++;
     });
     return new Puzzle(puz, dis, pos);
@@ -203,7 +189,7 @@ function savePuzzle(key, puz) {
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
             alert("No more room for puzzles somehow! I'm sorry!");
-        }
+        } else alert(e);
     }
     return key;
 }
@@ -214,10 +200,24 @@ function loadPuzzle(key) {
     return new Puzzle(puzzle.value, puzzle.isDisabled, puzzle.possibles);
 }
 
+function setPossible(row, col, pos) {
+    var cellSelector = "#puzzle .r" + row + ".c" + col + " span.possibles";
+    $(cellSelector).text(pos);
+}
+
+function appendPossible(row, col, pos) {
+    var cellSelector = "#puzzle .r" + row + ".c" + col + " span.possibles";
+    var cellObj = $(cellSelector)
+    var cur = cellObj.text();
+    if (cur == null) cellObj.text(pos);
+    if (cur < pos) cellObj.text(cur + " " + pos);
+    else cellObj.text(pos + " " + cur);
+}
+
 function countFilled() {
     var c=0;
     $("#puzzle input").each(function() {
-        if (this.value != "") c++;
+        if ($(this).val() != "") c++;
     });
     return c;
 }
