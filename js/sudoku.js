@@ -144,11 +144,11 @@ function updateButtons() {
 }
 
 function showButtons() {
-    $("#leftMenu button.hidden, #rightMenu button.hidden").show();
+    $(".hidden").show();
 }
 
 function hideButtons() {
-    $("#leftMenu button.hidden, #rightMenu button.hidden").hide();
+    $(".hidden").hide();
 }
 
 function displayPuzzle(puz) {
