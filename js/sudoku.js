@@ -2,11 +2,12 @@
  * The grid of numbers that all the solving methods interact with.
  * Follows the format grid[ROW][COLUMN].
  */
+/*
 var grid = new Array(9);        // create 9 rows
 for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
     grid[r] = new Array(9);
 }
-
+*/
 function randomShittyPuzzle() {
     var cell = "";
     var puzzle = genRow();
@@ -134,7 +135,7 @@ function singlesInRow() {
         }
 
         // Check the frequencies
-        int single = 0;
+        var single = 0;
         for(var i = 0; i < 9; i++) {
             if(freq[i] == 1) {
                 single = i + 1;
@@ -198,7 +199,7 @@ function singlesInColumn() {
         }
 
         // Check the frequencies
-        int single = 0;
+        var single = 0;
         for(var i = 0; i < 9; i++) {
             if(freq[i] == 1) {
                 single = i + 1;
@@ -267,7 +268,7 @@ function singlesInBox() {
             }
 
             // Check the frequencies
-            int single = 0;
+            var single = 0;
             for(var i = 0; i < 9; i++) {
                 if(freq[i] == 1) {
                     single = i + 1;
