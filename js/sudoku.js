@@ -3,8 +3,9 @@
  * Follows the format grid[ROW][COLUMN].
  */
 var grid = new Array(9);        // create 9 rows
-for(var i = 0; i < 9; i++)      // in every row, create 9 cells
-    grid[i] = new Array(9);
+for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
+    grid[r] = new Array(9);
+}
 
 function randomShittyPuzzle() {
     var cell = "";
@@ -221,8 +222,76 @@ function singlesInColumn() {
     return flag;
 }
 
+/**
+ * Check for hidden singles and naked singles in each box.
+ * A hidden single arises when there is only one possible cell for a value.
+ * A naked single arises when there is only one possible value for a cell.
+ *
+ * @returns TRUE if method solves any cells, FALSE otherwise.
+ */
 function singlesInBox() {
-    return false;
+    var flag = false;
+
+    // Check for naked singles
+    for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row travers
+        for(var bCol = 0; bCol < 9; bCol += 3) {        // Inter-box column traversal
+            for(var row = 0; row < 3; row++) {          // Intra-box row traversal
+                for(var col = 0; col < 3; col++) {      // Intra-box column traversal
+                    if(grid[bRow + row][bCol + col].howManyPossible() == 1) {
+                        for(var i = 0; i < 9; i++) {
+                            if(grid[bRow + row][bCol + col].isPossible(i + 1)) {
+                                grid[bRow + row][bCol + col].setValue(i + 1);
+                                grid[bRow + row][bCol + col].clearPosValues();
+                                clearRow(bCol + col, bRow + row);
+                                clearColumn(bCol + col, bRow + row);
+                                clearBox(bCol + col, bRow + row);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+                     
+
+    // Check for hidden singles
+    for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row traversal
+        for(var bCol = 0; bCol < 9; bCol += 3) {        // Inter-box column traversal
+            // Tally the frequencies
+            var freq = [0,0,0,0,0,0,0,0,0];
+            for(var row = 0; row < 3; row++) {          // Intra-box row traversal
+                for(var col = 0; col < 3; col++) {      // Intra-box column traversal
+                    if(grid[row][col].isPossible(i + 1))
+                        freq[i]++;
+                }
+            }
+
+            // Check the frequencies
+            int single = 0;
+            for(var i = 0; i < 9; i++) {
+                if(freq[i] == 1) {
+                    single = i + 1;
+                    break;
+                }
+            }
+
+            // If a single exists, solve the cell it occurs in
+            if(single != 0) {
+                for(var row = 0; row < 3; row++) {      // Intra-box row traversal
+                    for(var col = 0; col < 3; col++) {  // Intra-box column traversal
+                        if(grid[bRow + row][bCol + col].isPossible(single)) {
+                            grid[bRow + row][bCol + col].setValue(single);
+                            grid[bRow + row][bCol + col].clearPosValues();
+                            clearRow(bCol + col, bRow + row);
+                            clearColumn(bCol + col, bRow + row);
+                            flag = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return flag;
 }
 
 function nakedPairInRow() {
