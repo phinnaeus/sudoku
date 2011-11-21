@@ -550,19 +550,27 @@ function puzzleToObject() {
     return new Puzzle(puz, dis, pos);
 }
 
-function savePuzzle(key, puz) {
+function savePuzzle(puz) {
+    //TODO: check to see if "davistm+coleycj" exists in localStorage
+    //          if yes, popup confirm dialog about overwriting
+    //              if confirmed, save puzzle
+    //              if cancelled, return;;
+    //          if no, just save it
     try {
-        localStorage.setObject(key,puz);
+        localStorage.setObject("davistm+coleycj",puz);
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
             alert("No more room for puzzles somehow! I'm sorry!");
         } else alert(e);
     }
-    return key;
+    return true;
 }
 
-function loadPuzzle(key) {
-    var puzzle = localStorage.getObject(key);
+function loadPuzzle() {
+    //TODO: the button should only be available if "davistm+coleycj" exists in localStorage
+    //          should fire an event on load if the key exits, or when something is saved.
+    //          until that event fires, load button should be hidden
+    var puzzle = localStorage.getObject("davistm+coleycj");
     // have to do this to make the thing typeOf Puzzle
     return new Puzzle(puzzle.value, puzzle.isDisabled, puzzle.possibles);
 }
@@ -699,7 +707,7 @@ function testPuzzle() {
     this.fiendish101 = new Puzzle(p101,puzToDisArray(p101),posArr);
 
     var p102 = "000900030600030000005680240780000001009000600100000094046027900000060005050008000".split("");
-    this.fiendish102_ = new Puzzle(p102,puzToDisArray(p102),posArr);
+    this.fiendish102 = new Puzzle(p102,puzToDisArray(p102),posArr);
 
     var p103 = "054800000600007000030040008200004080580030046090600002300080050000200003000003810".split("");
     this.fiendish103 = new Puzzle(p103,puzToDisArray(p103),posArr);
