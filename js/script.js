@@ -4,7 +4,7 @@ $(document).ready(function(){
     clearPuzzle();
     loadTestMenu();
 //    showButtons();
-
+    
     $("#puzzle input").autotab_filter("numeric").autotab_magic().on('change', function() {
         updateProgressBar();
         updateButtons();

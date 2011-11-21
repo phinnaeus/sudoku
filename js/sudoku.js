@@ -456,12 +456,6 @@ function recursiveBacktracking(startingCol, startingRow) {
     return flag;
 }
 
-// space for other crap here //
-
-function nukeItFromOrbit() {
-    return false;
-}
-
 // helpers
 
 function highlightRow(row, col) {
@@ -673,12 +667,15 @@ function loadTestMenu() {
     }
 
     $.each(options, function(key,value) {
-        $("#testSelect").append($("<option></option>").attr("value", key).text(key));
+        $("#testSelect")
+            .append($("<option></option>")
+            .attr("value", key)
+            .text(key));
     });
 
     $("#testSelect").change(function () {
-        var puzId = $(this).val();
-        displayPuzzle(eval(tests.puzId));
+        var puzId = "tests." + $(this).val();
+        displayPuzzle(eval(puzId));
     });
 }
 
