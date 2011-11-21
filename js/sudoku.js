@@ -1,3 +1,12 @@
+/**
+ * The grid of numbers that all the solving methods interact with.
+ * Follows the format grid[ROW][COLUMN].
+ */
+var grid = new Array(9);        // create 9 rows
+for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
+    grid[r] = new Array(9);
+}
+
 function randomShittyPuzzle() {
     var cell = "";
     var puzzle = genRow();
@@ -21,18 +30,343 @@ function randomShittyPuzzle() {
     updateProgressBar();
 }
 
-// solvers
+/**
+ * Fills the grid with the initial values from the display table,
+ * and fills the posVals array for each node.
+ */
+function createGrid() {
+    // Fill the grid with initial values
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            //TODO
+        }
+    }
+}
 
+// Solving Helpers #############################################################
+
+/**
+ * Eliminate a value from all possibility arrays in a row
+ *
+ * @param row = Row of the cell holding the value to be eliminated
+ * @param column = Column of the cell holding the value to be eliminated
+ */
+function clearRow(column, row) {
+    if(column >= 0 && column < 9 && row >= 0 && row < 9) {
+        var value = grid[row][column].getValue();
+        for(var i = 0; i < 9; i++)
+            grid[row][i].setNotPossible(value);
+    }
+}
+
+/**
+ * Eliminate a value from all possibility arrays in a column
+ *
+ * @param row = Row of the cell holding the value to be eliminated
+ * @param column = Column of the cell holding the value to be eliminated
+ */
+function clearColumn(column, row) {
+    if(column >= 0 && column < 9 && row >= 0 && row < 9) {
+        var value = grid[row][column].getValue();
+        for(var i = 0; i < 9; i++)
+            grid[i][column].setNotPossible(value);
+    }
+}
+
+/**
+ * Eliminate a value from all possibility arrays in a 3x3 box
+ *
+ * @param row = Row of the cell holding the value to be eliminated
+ * @param column = Column of the cell holding the value to be eliminated
+ */
+function clearBox(column, row) {
+    if(column >= 0 && column < 9 && row >= 0 && row < 9) {
+        var value = grid[row][column].getValue();
+        var rOffset = 3 * (row / 3);
+        var cOffset = 3 * (column / 3);
+
+        for(var bRow = 0; bRow < 3; bRow++) {
+            for(var bCol = 0; bCol < 3; bCol++)
+                grid[bRow + rOffset][bCol + cOffset].setNotPossible(value);
+        }
+    }
+}
+
+/**
+ * Check if num is a valid value for the given row.
+ * Is only called by method recursiveBacktracking().
+ *
+ * @param row = The row to check for conflicts
+ * @param num = The value to check for conflicts
+ * @return FALSE if num conflicts with other cells in row, TRUE otherwise.
+ */
+function checkRow(row, num) {
+    for(var col = 0; col < 9; col++) {
+        if(grid[row][col].getValue() == num)
+            return false;
+    }
+    return true;
+}
+
+/**
+ * Check if num is a valid value for the given column.
+ * Is only called by method recursiveBacktracking().
+ *
+ * @param col = The column to check for conflicts
+ * @param num = The value to check for conflicts
+ * @return FALSE if num conflicts with other cells in column, TRUE otherwise
+ */
+function checkColumn(col, num) {
+    for(var row = 0; row < 9; row++) {
+        if(grid[row][col].getValue() == num)
+            return false;
+    }
+    return true;
+}
+
+/**
+ * Check if num is a valid value for the given box.
+ * Is only called by method recursiveBacktracking().
+ *
+ * @param col The column to check for conflicts
+ * @param row The row to check for conflicts
+ * @param num The value to check for conflicts
+ * @return FALSE if num conflicts with other cells in box, TRUE otherwise.
+ */
+function checkBox(col, row, num) {
+    var bCol = (col / 3) * 3;
+    var bRow = (row / 3) * 3;
+
+    for(var r = 0; r < 3; r++) {
+        for(var c = 0; c < 3; c++) {
+            if(grid[bRow + r][bCol + c].getValue() == num)
+                return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * Check if puzzle is solved. Does not check for accuracy because it assumes
+ * all changes to the grid[][] are done by my solving methods, and that all
+ * my solving methods will only insert correct values.
+ *
+ * @return TRUE if all 81 cells have values, FALSE otherwise.
+ */
+function isSolved() {
+    var count = 0;
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            if(grid[row][col].getValue() != 0)
+                count++;
+        }
+    }
+    if(count == 81)
+        return true;
+    else
+        return false;
+}
+
+// Solvers #####################################################################
+
+/**
+ * Checks for hidden singles and naked singles in each row.
+ * A hidden single arises when there is only one possible cell for a value.
+ * A naked single arises when there is only one possible value for a cell.
+ *
+ * @returns TRUE if method solves any cells, FALSE otherwise.
+ */
 function singlesInRow() {
-    return false;
+    var flag = false;
+
+    // Check for naked singles
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            if(grid[row][col].howManyPossible() == 1) {
+                for(var i = 0; i < 9; i++) {
+                    if(grid[row][col].isPossible(i + 1)) {
+                        grid[row][col].setValue(i + 1);
+                        grid[row][col].clearPosValues();
+                        clearRow(col, row);
+                        clearColumn(col, row);
+                        clearBox(col, row);
+                        flag = true;
+                    }
+                }
+            }
+        }
+    }
+
+    // Check for hidden singles
+    for(var row = 0; row < 9; row++) {
+        // Tally the frequencies
+        var freq = [0,0,0,0,0,0,0,0,0];
+        for(var col = 0; col < 9; col++) {
+            for(var i = 0; i < 9; i++) {
+                if(grid[row][col].isPossible(i + 1))
+                    freq[i]++;
+            }
+        }
+
+        // Check the frequencies
+        var single = 0;
+        for(var i = 0; i < 9; i++) {
+            if(freq[i] == 1) {
+                single = i + 1;
+                break;
+            }
+        }
+
+        // If a single exists, solve the cell it occurs in
+        if(single != 0) {
+            for(var col = 0; col < 9; col++) {
+                if(grid[row][col].isPossible(single)) {
+                    grid[row][col].setValue(single);
+                    grid[row][col].clearPosValues();
+                    clearColumn(col, row);
+                    clearBox(col,row);
+                    flag = true;
+                }
+            }
+        }
+    }
+    return flag;
 }
 
+/**
+ * Checks for hidden singles and naked singles in each column.
+ * A hidden single arises when there is only one possible cell for a value.
+ * A naked single arises when there is only one possible value for a cell.
+ *
+ * @returns TRUE if method solves any cells, FALSE otherwise.
+ */
 function singlesInColumn() {
-    return false;
+    var flag = false;
+
+    // Check for naked singles
+    for(var col = 0; col < 9; col++) {
+        for(var row = 0; row < 9; row++) {
+            if(grid[row][col].howManyPossible() == 1) {
+                for(var i = 0; i < 9; i++) {
+                    if(grid[row][col].isPossible(i + 1)) {
+                        grid[row][col].setValue(i + 1);
+                        grid[row][col].clearPosValues();
+                        clearRow(col, row);
+                        clearColumn(col, row);
+                        clearBox(col, row);
+                        flag = true;
+                    }
+                }
+            }
+        }
+    }
+
+    // Check for hidden singles
+    for(var col = 0; col < 9; col++) {
+        // Tally the frequencies
+        var freq = [0,0,0,0,0,0,0,0,0];
+        for(var row = 0; row < 9; row++) {
+            for(var i = 0; i < 9; i++) {
+                if(grid[row][col].isPossible(i + 1))
+                    freq[i]++;
+            }
+        }
+
+        // Check the frequencies
+        var single = 0;
+        for(var i = 0; i < 9; i++) {
+            if(freq[i] == 1) {
+                single = i + 1;
+                break;
+            }
+        }
+
+        // If a single exists, solve the cell it occurs in
+        if(single != 0) {
+            for(var row = 0; row < 9; row++) {
+                if(grid[row][col].isPossible(single)) {
+                    grid[row][col].setValue(single);
+                    grid[row][col].clearPosValues();
+                    clearRow(col, row);
+                    clearBox(col, row);
+                    flag = true;
+                }
+            }
+        }
+    }
+    return flag;
 }
 
+/**
+ * Check for hidden singles and naked singles in each box.
+ * A hidden single arises when there is only one possible cell for a value.
+ * A naked single arises when there is only one possible value for a cell.
+ *
+ * @returns TRUE if method solves any cells, FALSE otherwise.
+ */
 function singlesInBox() {
-    return false;
+    var flag = false;
+
+    // Check for naked singles
+    for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row travers
+        for(var bCol = 0; bCol < 9; bCol += 3) {        // Inter-box column traversal
+            for(var row = 0; row < 3; row++) {          // Intra-box row traversal
+                for(var col = 0; col < 3; col++) {      // Intra-box column traversal
+                    if(grid[bRow + row][bCol + col].howManyPossible() == 1) {
+                        for(var i = 0; i < 9; i++) {
+                            if(grid[bRow + row][bCol + col].isPossible(i + 1)) {
+                                grid[bRow + row][bCol + col].setValue(i + 1);
+                                grid[bRow + row][bCol + col].clearPosValues();
+                                clearRow(bCol + col, bRow + row);
+                                clearColumn(bCol + col, bRow + row);
+                                clearBox(bCol + col, bRow + row);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+                     
+
+    // Check for hidden singles
+    for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row traversal
+        for(var bCol = 0; bCol < 9; bCol += 3) {        // Inter-box column traversal
+            // Tally the frequencies
+            var freq = [0,0,0,0,0,0,0,0,0];
+            for(var row = 0; row < 3; row++) {          // Intra-box row traversal
+                for(var col = 0; col < 3; col++) {      // Intra-box column traversal
+                    if(grid[row][col].isPossible(i + 1))
+                        freq[i]++;
+                }
+            }
+
+            // Check the frequencies
+            var single = 0;
+            for(var i = 0; i < 9; i++) {
+                if(freq[i] == 1) {
+                    single = i + 1;
+                    break;
+                }
+            }
+
+            // If a single exists, solve the cell it occurs in
+            if(single != 0) {
+                for(var row = 0; row < 3; row++) {      // Intra-box row traversal
+                    for(var col = 0; col < 3; col++) {  // Intra-box column traversal
+                        if(grid[bRow + row][bCol + col].isPossible(single)) {
+                            grid[bRow + row][bCol + col].setValue(single);
+                            grid[bRow + row][bCol + col].clearPosValues();
+                            clearRow(bCol + col, bRow + row);
+                            clearColumn(bCol + col, bRow + row);
+                            flag = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return flag;
 }
 
 function nakedPairInRow() {
@@ -81,6 +415,45 @@ function hiddenTripletInColumn() {
 
 function hiddenTripletInBox() {
     return false;
+}
+
+function recursiveBacktracking(startingCol, startingRow) {
+    var flag = false;
+
+    // Check if puzzle is solved
+    if(startingRow > 8) {
+        System.out.println("Solved using brute force.");
+        //TODO: Something to kill all running recursions
+    } else {
+        // If cell is not empty, continue with next cell
+        if(grid[startingRow][startingCol].getValue() != 0) {
+            if(startingCol < 8)
+                flag = recursiveBacktracking(startingCol + 1, startingRow);
+            else
+                flag = recursiveBacktracking(0, startingRow + 1);
+        } else {
+            // Find a valid value for the empty cell
+            for(var value = 1; value < 10; value++) {
+                if(grid[startingRow][startingCol].isPossible(value) &&
+                    checkRow(startingRow, value) &&
+                    checkColumn(startingCol, value) &&
+                    checkBox(startingCol, startingRow, value)) {
+                    
+                    grid[startingRow][startingCol].setValue(value);
+
+                    // Recursive call to solve the next cell
+                    if(startingCol < 8)
+                        flag = recursiveBacktracking(startingCol + 1, startingRow);
+                    else
+                        flag = recursiveBacktracking(0, startingRow + 1);
+                }
+            }
+
+            // No valid number was found, so undo changes to grid[][]
+            grid[startingRow][startingCol].setValue(0);
+        }
+    }
+    return flag;
 }
 
 // space for other crap here //
