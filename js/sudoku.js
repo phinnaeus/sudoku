@@ -284,6 +284,31 @@ function puzToDisArray(puz) {
     return dis;
 }
 
+function loadTestMenu() {
+    var tests = new testPuzzle();
+
+    $("#testSelect").show();
+    var options = {
+        "challenging111":"",
+        "fiendish017":"",
+        "fiendish017":"",
+        "fiendish100":"",
+        "fiendish101":"",
+        "fiendish102":"",
+        "fiendish103":"",
+        "fiendish104":""
+    }
+
+    $.each(options, function(key,value) {
+        $("#testSelect").append($("<option></option>").attr("value", key).text(key));
+    });
+
+    $("#testSelect").change(function () {
+        var puzId = $(this).val();
+        displayPuzzle(eval(tests.puzId));
+    });
+}
+
 function testPuzzle() {
     var posArr = new Array(81);
     for (var i=0; i<81; i++) posArr[i] = "";
