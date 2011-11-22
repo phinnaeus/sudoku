@@ -161,10 +161,7 @@ function isSolved() {
                 count++;
         }
     }
-    if(count == 81)
-        return true;
-    else
-        return false;
+    return count == 81;
 }
 
 // Solvers #####################################################################
@@ -417,20 +414,32 @@ function hiddenTripletInBox() {
     return false;
 }
 
-function recursiveBacktracking(startingCol, startingRow) {
+/**
+ * Attempts to solve the puzzle using brute force tactics. 
+ * recursiveBacktracking() is currently the only method it uses.
+ */
+function bruteForce() {
+    try {
+        recursiveBacktracking(0,0,0);
+    } catch(e) {
+        alert(e);   
+    }
+}
+
+function recursiveBacktracking(startingCol, startingRow, recursions) {
     var flag = false;
 
     // Check if puzzle is solved
     if(startingRow > 8) {
-        System.out.println("Solved using brute force.");
-        //TODO: Something to kill all running recursions
+        // End all pending recursions
+        throw "Puzzle required " + (recursions + 1) + " recursions.";
     } else {
         // If cell is not empty, continue with next cell
         if(grid[startingRow][startingCol].getValue() != 0) {
             if(startingCol < 8)
-                flag = recursiveBacktracking(startingCol + 1, startingRow);
+                flag = recursiveBacktracking(startingCol + 1, startingRow, recursions + 1);
             else
-                flag = recursiveBacktracking(0, startingRow + 1);
+                flag = recursiveBacktracking(0, startingRow + 1, recursions + 1);
         } else {
             // Find a valid value for the empty cell
             for(var value = 1; value < 10; value++) {
@@ -443,9 +452,9 @@ function recursiveBacktracking(startingCol, startingRow) {
 
                     // Recursive call to solve the next cell
                     if(startingCol < 8)
-                        flag = recursiveBacktracking(startingCol + 1, startingRow);
+                        flag = recursiveBacktracking(startingCol + 1, startingRow, recursions + 1);
                     else
-                        flag = recursiveBacktracking(0, startingRow + 1);
+                        flag = recursiveBacktracking(0, startingRow + 1, recursions + 1);
                 }
             }
 
