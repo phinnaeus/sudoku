@@ -51,7 +51,7 @@ function createGrid() {
         }
     }
 
-    // Set update the possibility arrays
+    // Update the possibility arrays
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
             clearRow(col, row);
@@ -71,7 +71,6 @@ function createGrid() {
 function step() {
     // Create the grid if it does not already exist
     if(typeof grid[0][0] === "undefined") {
-        //alert("Grid does not exist yet");
         createGrid();
     }
 
@@ -81,15 +80,12 @@ function step() {
 
     srFlag = singlesInRow(true);
     if(srFlag) {
-        //alert("singlesInRow()");
     } else {
         scFlag = singlesInColumn(true);
         if(scFlag) {
-            //alert("singlesInColumn()");
         } else {
             sbFlag = singlesInBox(true);
             if(sbFlag) {
-                //alert("singlesInBox()");
             } else {
                 stuck = true;
                 var brute = confirm("Stuck! Should I use brute force?");
@@ -99,8 +95,6 @@ function step() {
             }
         }
     }
-    //alertAllPos();
-    //alertGrid();
 }
 
 /**
@@ -109,7 +103,6 @@ function step() {
 function solve() {
     // Create the grid if it does not already exist
     if(typeof grid[0][0] === "undefined") {
-        //alert("Grid does not exist yet");
         createGrid();
     }
 
@@ -120,15 +113,12 @@ function solve() {
     while(!stuck) {
         srFlag = singlesInRow();
         if(srFlag) {
-            //alert("singlesInRow()");
         } else {
             scFlag = singlesInColumn();
             if(scFlag) {
-                //alert("singlesInColumn()");
             } else {
                 sbFlag = singlesInBox();
                 if(sbFlag) {
-                    //alert("singlesInBox()");
                 } else {
                     stuck = true;
                 }
@@ -141,8 +131,6 @@ function solve() {
             bruteForce();
         }
     }
-    //alertAllPos();
-    //alertGrid();
 }
 
 // Solving Helpers #############################################################
@@ -333,7 +321,6 @@ function singlesInRow(step) {
                         clearColumn(col, row);
                         clearBox(col, row);
                         flag = true;
-                        //alert("Found naked single");
                         updateProgressBar();
                         $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                         $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
@@ -374,7 +361,6 @@ function singlesInRow(step) {
                     clearColumn(col, row);
                     clearBox(col,row);
                     flag = true;
-                    //alert("Found hidden single");
                     updateProgressBar();
                     $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                     $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
@@ -411,7 +397,6 @@ function singlesInColumn(step) {
                         clearColumn(col, row);
                         clearBox(col, row);
                         flag = true;
-                        //alert("Found naked single");
                         updateProgressBar();
                         $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                         $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
@@ -452,7 +437,6 @@ function singlesInColumn(step) {
                     clearRow(col, row);
                     clearBox(col, row);
                     flag = true;
-                    //alert("Found hidden single");
                     updateProgressBar();
                     $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                     $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
@@ -491,7 +475,6 @@ function singlesInBox(step) {
                                 clearColumn(bCol + col, bRow + row);
                                 clearBox(bCol + col, bRow + row);
                                 flag = true;
-                                //alert("Found naked single");
                                 updateProgressBar();
                                 $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
                                 $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(i + 1);
@@ -537,7 +520,6 @@ function singlesInBox(step) {
                             clearRow(bCol + col, bRow + row);
                             clearColumn(bCol + col, bRow + row);
                             flag = true;
-                            //alert("Found hidden single");
                             updateProgressBar();
                             $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
                             $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(single);
@@ -612,13 +594,22 @@ function bruteForce() {
     }
 }
 
-var numRecursions = 0;
+var numRecursions = 0;      // Counter for recursiveBacktracking()
+
+/**
+ * Uses recursive backtracking to solve a sudoku puzzle. Currently only finds
+ * one solution, the first one it finds. Could be made to find all solutions or
+ * to check if the puzzle has a unique solution.
+ *
+ * REQUIRES: numRecursions variable for use as a counter
+ *
+ * @param startingCol The starting column for the next step in the recursion
+ * @param startingRow The starting row for the net step in the recursion
+ */
 function recursiveBacktracking(startingCol, startingRow) {
     var flag = false;
 
-    //clearPuzzleStyles();
-    numRecursions++;
-    //updateProgressBar();
+    numRecursions++;        // increment the counter
 
     // Check if puzzle is solved
     if(startingRow > 8) {
@@ -647,8 +638,6 @@ function recursiveBacktracking(startingCol, startingRow) {
                     checkBox(startingCol, startingRow, value)) {
                     
                     grid[startingRow][startingCol].setValue(value);
-                    //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1)).css("background-color","#99CCFF");
-                    //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1) + ">input").val(value);
 
                     // Recursive call to solve the next cell
                     if(startingCol < 8)
@@ -660,8 +649,6 @@ function recursiveBacktracking(startingCol, startingRow) {
 
             // No valid number was found, so undo changes to grid[][]
             grid[startingRow][startingCol].setValue(0);
-            //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1)).css("background-color","#FF3333");
-            //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1) + ">input").val(value);
         }
     }
     return flag;
@@ -877,7 +864,10 @@ function loadTestMenu() {
     var options = {
         "easy004":"",
         "easy005":"",
+        "medium115":"",
         "challenging111":"",
+        "hard044":"",
+        "hard109":"",
         "fiendish017":"",
         "fiendish071":"",
         "fiendish100":"",
@@ -905,65 +895,65 @@ function testPuzzle() {
     var posArr = new Array(81);
     for (var i=0; i<81; i++) posArr[i] = "";
     
-    var p004 = "007000063804670900010039002003700600700401005008006100600210090001063508390000700".split("");
-    this.easy004 = new Puzzle(p004, puzToDisArray(p004), posArr);
+    var e004 = "007000063804670900010039002003700600700401005008006100600210090001063508390000700".split("");
+    this.easy004 = new Puzzle(e004, puzToDisArray(e004), posArr);
 
-    var p005 = "981000700307190080004082000700600390200000007013007005000350200060014803002000564".split("");
-    this.easy005 = new Puzzle(p005, puzToDisArray(p005), posArr);
+    var e005 = "981000700307190080004082000700600390200000007013007005000350200060014803002000564".split("");
+    this.easy005 = new Puzzle(e005, puzToDisArray(e005), posArr);
 
-    var p111 = "507100008000006005602500003200390000009080100000061002900008301100200000700003506".split("");
-    this.challenging111 = new Puzzle(p111,puzToDisArray(p111),posArr);
+    var c111 = "507100008000006005602500003200390000009080100000061002900008301100200000700003506".split("");
+    this.challenging111 = new Puzzle(c111,puzToDisArray(c111),posArr);
 
-    var p017 = "070006900006007820200005006030040000001602700000070010600200004028700300003500080".split("");
-    this.fiendish017 = new Puzzle(p017,puzToDisArray(p017),posArr);
+    var f017 = "070006900006007820200005006030040000001602700000070010600200004028700300003500080".split("");
+    this.fiendish017 = new Puzzle(f017,puzToDisArray(f017),posArr);
 
-    var p071 = "007040600000900010209100500000600080006703400030001000008006304090002000003090271".split("");
-    this.fiendish071 = new Puzzle(p071,puzToDisArray(p071),posArr);
+    var f071 = "007040600000900010209100500000600080006703400030001000008006304090002000003090271".split("");
+    this.fiendish071 = new Puzzle(f071,puzToDisArray(f071),posArr);
 
-    var p100 = "400000230500070000060009004030507800020030050007806010200900080000010002093000001".split("");
-    this.fiendish100 = new Puzzle(p100,puzToDisArray(p100),posArr);
+    var f100 = "400000230500070000060009004030507800020030050007806010200900080000010002093000001".split("");
+    this.fiendish100 = new Puzzle(f100,puzToDisArray(f100),posArr);
 
-    var p101 = "201080003000507020008000000082100000009408100000005290000000300010709000900010507".split("");
-    this.fiendish101 = new Puzzle(p101,puzToDisArray(p101),posArr);
+    var f101 = "201080003000507020008000000082100000009408100000005290000000300010709000900010507".split("");
+    this.fiendish101 = new Puzzle(f101,puzToDisArray(f101),posArr);
 
-    var p102 = "000900030600030000005680240780000001009000600100000094046027900000060005050008000".split("");
-    this.fiendish102 = new Puzzle(p102,puzToDisArray(p102),posArr);
+    var f102 = "000900030600030000005680240780000001009000600100000094046027900000060005050008000".split("");
+    this.fiendish102 = new Puzzle(f102,puzToDisArray(f102),posArr);
 
-    var p103 = "054800000600007000030040008200004080580030046090600002300080050000200003000003810".split("");
-    this.fiendish103 = new Puzzle(p103,puzToDisArray(p103),posArr);
+    var f103 = "054800000600007000030040008200004080580030046090600002300080050000200003000003810".split("");
+    this.fiendish103 = new Puzzle(f103,puzToDisArray(f103),posArr);
 
-    var p104 = "200009000000070098050810004000040900900267001002080000700054080530090000000100007".split("");
-    this.fiendish104 = new Puzzle(p104,puzToDisArray(p104),posArr);
+    var f104 = "200009000000070098050810004000040900900267001002080000700054080530090000000100007".split("");
+    this.fiendish104 = new Puzzle(f104,puzToDisArray(f104),posArr);
 
-    var p105 = "004001006000500048069008000013900000700000004000007310000300490920006000400700200".split("");
-    this.fiendish105 = new Puzzle(p105,puzToDisArray(p105),posArr);
+    var f105 = "004001006000500048069008000013900000700000004000007310000300490920006000400700200".split("");
+    this.fiendish105 = new Puzzle(f105,puzToDisArray(f105),posArr);
 
-    var p106 = "306000490000605002080004003060007240000000000018300050100500080600803000024000605".split("");
-    this.fiendish106 = new Puzzle(p106,puzToDisArray(p106),posArr);
+    var f106 = "306000490000605002080004003060007240000000000018300050100500080600803000024000605".split("");
+    this.fiendish106 = new Puzzle(f106,puzToDisArray(f106),posArr);
 
-    var p107 = "500103400000025709000000801050000608000407000203000010406000000301560000725901006".split("");
-    this.fiendish107 = new Puzzle(p107,puzToDisArray(p107),posArr);
+    var f107 = "500103400000025709000000801050000608000407000203000010406000000301560000725901006".split("");
+    this.fiendish107 = new Puzzle(f107,puzToDisArray(f107),posArr);
 
-    var p108 = "980020010400003000300800072030040000200301007000090030170002006000400009040030081".split("");
-    this.fiendish108 = new Puzzle(p108,puzToDisArray(p108),posArr);
+    var f108 = "980020010400003000300800072030040000200301007000090030170002006000400009040030081".split("");
+    this.fiendish108 = new Puzzle(f108,puzToDisArray(f108),posArr);
 
-    var p109 = "109020050870000000240306000050001000004030500000900020000509082000000061090070405".split("");
-    this.fiendish109 = new Puzzle(p109,puzToDisArray(p109),posArr);
+    var f109 = "109020050870000000240306000050001000004030500000900020000509082000000061090070405".split("");
+    this.fiendish109 = new Puzzle(f109,puzToDisArray(f109),posArr);
 
-    var p110 = "006000405000640009200090360513020800000000000008030951072050004100079000309000500".split("");
-    this.fiendish110 = new Puzzle(p110,puzToDisArray(p110),posArr);
+    var f110 = "006000405000640009200090360513020800000000000008030951072050004100079000309000500".split("");
+    this.fiendish110 = new Puzzle(f110,puzToDisArray(f110),posArr);
 
-    var p044 = "060003820004000600005640003020009000008000200000800010500067400001000500072500030".split("");
-    this.hard044 = new Puzzle(p044,puzToDisArray(p044),posArr);
+    var h044 = "060003820004000600005640003020009000008000200000800010500067400001000500072500030".split("");
+    this.hard044 = new Puzzle(h044,puzToDisArray(h044),posArr);
 
-    var p109 = "000610400680700190104000007000439008000000000700285000800000703079003016001067000".split("");
-    this.hard109 = new Puzzle(p109,puzToDisArray(p109),posArr);
+    var h109 = "000610400680700190104000007000439008000000000700285000800000703079003016001067000".split("");
+    this.hard109 = new Puzzle(h109,puzToDisArray(h109),posArr);
 
-    var p115 = "060081290090350700000042000200000031605000809370000002000610000003079060026830010".split("");
-    this.medium115 = new Puzzle(p115,puzToDisArray(p115),posArr);
+    var m115 = "060081290090350700000042000200000031605000809370000002000610000003079060026830010".split("");
+    this.medium115 = new Puzzle(m115,puzToDisArray(m115),posArr);
 
-    var p18ClueBDSym = "000025000000007300000000480000000059700000002380000000095000000001600000000830000".split("");
-    this.BDSymmetrical18Clue = new Puzzle(p18ClueBDSym, puzToDisArray(p18ClueBDSym), posArr);
+    var BDSym18Clue = "000025000000007300000000480000000059700000002380000000095000000001600000000830000".split("");
+    this.BDSymmetrical18Clue = new Puzzle(BDSym18Clue, puzToDisArray(BDSym18Clue), posArr);
 /*
     var _CHANGE_ = "_CHANGE_".split("");
     this._CHANGE_ = new Puzzle(_CHANGE_,puzToDisArray(_CHANGE_),null);
