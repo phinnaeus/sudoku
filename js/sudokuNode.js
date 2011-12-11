@@ -1,17 +1,17 @@
-function sudokuNode(value) {
-    this.value = value;
-    this.posValues = [0,0,0,0,0,0,0,0,0,0];
+function sudokuNode(val) {
+    this.value = val;
+    if(val == 0)
+        this.posValues = [9,1,1,1,1,1,1,1,1,1];
+    else
+        this.posValues = [0,0,0,0,0,0,0,0,0,0];
 
     this.setValue = setValue;
     this.getValue = getValue;
-}
-
-function sudokuNode() {
-    this.value = 0;
-    this.posValues = [9,1,1,1,1,1,1,1,1,1];
-
-    this.setValue = setValue;
-    this.getValue = getValue;
+    this.setPossible = setPossible;
+    this.setNotPossible = setNotPossible;
+    this.isPossible = isPossible;
+    this.howManyPossible = howManyPossible;
+    this.clearPosValues = clearPosValues;
 }
 
 function setPossible(number) {
@@ -46,5 +46,5 @@ function setValue(value) {
 }
 
 function getValue() {
-    return value;
+    return this.value;
 }

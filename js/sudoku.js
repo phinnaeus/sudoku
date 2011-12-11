@@ -1,3 +1,6 @@
+// Import the sudokuNode.js file
+$("head").append("<script type='text/javascript' src='js/sudokuNode.js'></script>");
+
 /**
  * The grid of numbers that all the solving methods interact with.
  * Follows the format grid[ROW][COLUMN].
@@ -38,9 +41,108 @@ function createGrid() {
     // Fill the grid with initial values
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
-            //TODO
+            var selector = "td.r" + (row + 1) + ".c" + (col + 1) + ">input";
+            var value = parseInt($(selector).val());
+            if(isNaN(value))
+                grid[row][col] = new sudokuNode(0);
+            else
+                grid[row][col] = new sudokuNode(value);
+
         }
     }
+
+    // Set update the possibility arrays
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            clearRow(col, row);
+            clearColumn(col, row);
+            clearBox(col, row);
+        }
+    }
+    //alertAllPos();
+    //alertGrid();
+}
+
+// Solving Styles ##############################################################
+
+/**
+ * Attempts to solve any single cell in the puzzle
+ */
+function step() {
+    // Create the grid if it does not already exist
+    if(typeof grid[0][0] === "undefined") {
+        //alert("Grid does not exist yet");
+        createGrid();
+    }
+
+    // Flags for each solving method
+    var srFlag, scFlag, sbFlag, stuck;
+    srFlag = scFlag = sbFlag = stuck = false;
+
+    srFlag = singlesInRow(true);
+    if(srFlag) {
+        //alert("singlesInRow()");
+    } else {
+        scFlag = singlesInColumn(true);
+        if(scFlag) {
+            //alert("singlesInColumn()");
+        } else {
+            sbFlag = singlesInBox(true);
+            if(sbFlag) {
+                //alert("singlesInBox()");
+            } else {
+                stuck = true;
+                var brute = confirm("Stuck! Should I use brute force?");
+                if(brute) {
+                    bruteForce();
+                }
+            }
+        }
+    }
+    //alertAllPos();
+    //alertGrid();
+}
+
+/**
+ * Attempts to solve every cell in the puzzle
+ */
+function solve() {
+    // Create the grid if it does not already exist
+    if(typeof grid[0][0] === "undefined") {
+        //alert("Grid does not exist yet");
+        createGrid();
+    }
+
+    // Flags for each solving method
+    var srFlag, scFlag, sbFlag, stuck;
+    srFlag = scFlag = sbFlag = stuck = false;
+
+    while(!stuck) {
+        srFlag = singlesInRow();
+        if(srFlag) {
+            //alert("singlesInRow()");
+        } else {
+            scFlag = singlesInColumn();
+            if(scFlag) {
+                //alert("singlesInColumn()");
+            } else {
+                sbFlag = singlesInBox();
+                if(sbFlag) {
+                    //alert("singlesInBox()");
+                } else {
+                    stuck = true;
+                }
+            }
+        }
+    }
+
+    if(stuck) {
+        if(confirm("Stuck! Should I use brute force?")) {
+            bruteForce();
+        }
+    }
+    //alertAllPos();
+    //alertGrid();
 }
 
 // Solving Helpers #############################################################
@@ -82,8 +184,9 @@ function clearColumn(column, row) {
 function clearBox(column, row) {
     if(column >= 0 && column < 9 && row >= 0 && row < 9) {
         var value = grid[row][column].getValue();
-        var rOffset = 3 * (row / 3);
-        var cOffset = 3 * (column / 3);
+        var rOffset = 3 * Math.floor(row / 3);
+        var cOffset = 3 * Math.floor(column / 3);
+        //alert("rOffset: " + rOffset + " cOffset: " + cOffset);
 
         for(var bRow = 0; bRow < 3; bRow++) {
             for(var bCol = 0; bCol < 3; bCol++)
@@ -134,8 +237,8 @@ function checkColumn(col, num) {
  * @return FALSE if num conflicts with other cells in box, TRUE otherwise.
  */
 function checkBox(col, row, num) {
-    var bCol = (col / 3) * 3;
-    var bRow = (row / 3) * 3;
+    var bCol = 3 * Math.floor(col / 3);
+    var bRow = 3 * Math.floor(row / 3);
 
     for(var r = 0; r < 3; r++) {
         for(var c = 0; c < 3; c++) {
@@ -164,6 +267,46 @@ function isSolved() {
     return count == 81;
 }
 
+/**
+ * Displays an alert box with all the values of the sudoku puzzle
+ */
+function alertGrid() {
+    var string = "    A B C D E F G H I";
+    for(var row = 0; row < 9; row++) {
+        var rowString = "\n" + (row + 1) + ":";
+        for(var col = 0; col < 9; col++) {
+            var v = grid[row][col].getValue();
+            if(v == 0)
+                rowString += " ~";
+            else
+            rowString += (" " + v);
+        }
+        string += rowString;
+    }
+    alert(string);
+}
+
+/**
+ * Displays an alert box which lists all the possible values for all unsolved
+ * cells.
+ */
+function alertAllPos() {
+    var string = "CELL | # | POSSIBILITIES";
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            if(grid[row][col].howManyPossible() != 0) {
+                string += "\nR" + (row + 1) + "C" + (col + 1);
+                string += "   " + grid[row][col].howManyPossible() + "   ";
+                for(var i = 1; i < 10; i++) {
+                    if(grid[row][col].isPossible(i))
+                        string += (i + " ");
+                }
+            }
+        }
+    }
+    alert(string);
+}
+
 // Solvers #####################################################################
 
 /**
@@ -173,8 +316,10 @@ function isSolved() {
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
-function singlesInRow() {
+function singlesInRow(step) {
     var flag = false;
+
+    clearPuzzleStyles();
 
     // Check for naked singles
     for(var row = 0; row < 9; row++) {
@@ -188,6 +333,12 @@ function singlesInRow() {
                         clearColumn(col, row);
                         clearBox(col, row);
                         flag = true;
+                        //alert("Found naked single");
+                        updateProgressBar();
+                        $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                        $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
+                        if(step)
+                            return flag;
                     }
                 }
             }
@@ -223,6 +374,12 @@ function singlesInRow() {
                     clearColumn(col, row);
                     clearBox(col,row);
                     flag = true;
+                    //alert("Found hidden single");
+                    updateProgressBar();
+                    $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
+                    if(step)
+                        return flag;
                 }
             }
         }
@@ -237,8 +394,10 @@ function singlesInRow() {
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
-function singlesInColumn() {
+function singlesInColumn(step) {
     var flag = false;
+
+    clearPuzzleStyles();
 
     // Check for naked singles
     for(var col = 0; col < 9; col++) {
@@ -252,6 +411,12 @@ function singlesInColumn() {
                         clearColumn(col, row);
                         clearBox(col, row);
                         flag = true;
+                        //alert("Found naked single");
+                        updateProgressBar();
+                        $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                        $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
+                        if(step)
+                            return flag;
                     }
                 }
             }
@@ -287,6 +452,12 @@ function singlesInColumn() {
                     clearRow(col, row);
                     clearBox(col, row);
                     flag = true;
+                    //alert("Found hidden single");
+                    updateProgressBar();
+                    $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
+                    if(step)
+                        return flag;
                 }
             }
         }
@@ -301,8 +472,10 @@ function singlesInColumn() {
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
-function singlesInBox() {
+function singlesInBox(step) {
     var flag = false;
+
+    clearPuzzleStyles();
 
     // Check for naked singles
     for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row travers
@@ -317,6 +490,13 @@ function singlesInBox() {
                                 clearRow(bCol + col, bRow + row);
                                 clearColumn(bCol + col, bRow + row);
                                 clearBox(bCol + col, bRow + row);
+                                flag = true;
+                                //alert("Found naked single");
+                                updateProgressBar();
+                                $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
+                                $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(i + 1);
+                                if(step)
+                                    return flag;
                             }
                         }
                     }
@@ -357,6 +537,12 @@ function singlesInBox() {
                             clearRow(bCol + col, bRow + row);
                             clearColumn(bCol + col, bRow + row);
                             flag = true;
+                            //alert("Found hidden single");
+                            updateProgressBar();
+                            $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
+                            $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(single);
+                            if(step)
+                                return flag;
                         }
                     }
                 }
@@ -420,26 +606,38 @@ function hiddenTripletInBox() {
  */
 function bruteForce() {
     try {
-        recursiveBacktracking(0,0,0);
+        recursiveBacktracking(0,0);
     } catch(e) {
         alert(e);   
     }
 }
 
-function recursiveBacktracking(startingCol, startingRow, recursions) {
+var numRecursions = 0;
+function recursiveBacktracking(startingCol, startingRow) {
     var flag = false;
+
+    //clearPuzzleStyles();
+    numRecursions++;
+    //updateProgressBar();
 
     // Check if puzzle is solved
     if(startingRow > 8) {
+        for(var row = 0; row < 9; row++) {
+            for(var col = 0; col < 9; col++) {
+                if($("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val() == "")
+                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(grid[row][col].getValue());
+            }
+        }
+        updateProgressBar();
         // End all pending recursions
-        throw "Puzzle required " + (recursions + 1) + " recursions.";
+        throw "Puzzle required " + (numRecursions + 1) + " recursions.";
     } else {
         // If cell is not empty, continue with next cell
         if(grid[startingRow][startingCol].getValue() != 0) {
             if(startingCol < 8)
-                flag = recursiveBacktracking(startingCol + 1, startingRow, recursions + 1);
+                flag = recursiveBacktracking(startingCol + 1, startingRow);
             else
-                flag = recursiveBacktracking(0, startingRow + 1, recursions + 1);
+                flag = recursiveBacktracking(0, startingRow + 1);
         } else {
             // Find a valid value for the empty cell
             for(var value = 1; value < 10; value++) {
@@ -449,17 +647,21 @@ function recursiveBacktracking(startingCol, startingRow, recursions) {
                     checkBox(startingCol, startingRow, value)) {
                     
                     grid[startingRow][startingCol].setValue(value);
+                    //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1)).css("background-color","#99CCFF");
+                    //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1) + ">input").val(value);
 
                     // Recursive call to solve the next cell
                     if(startingCol < 8)
-                        flag = recursiveBacktracking(startingCol + 1, startingRow, recursions + 1);
+                        flag = recursiveBacktracking(startingCol + 1, startingRow);
                     else
-                        flag = recursiveBacktracking(0, startingRow + 1, recursions + 1);
+                        flag = recursiveBacktracking(0, startingRow + 1);
                 }
             }
 
             // No valid number was found, so undo changes to grid[][]
             grid[startingRow][startingCol].setValue(0);
+            //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1)).css("background-color","#FF3333");
+            //$("td.r" + (startingRow + 1) + ".c" + (startingCol + 1) + ">input").val(value);
         }
     }
     return flag;
@@ -673,14 +875,17 @@ function loadTestMenu() {
 
     $("#testSelect").show();
     var options = {
+        "easy004":"",
+        "easy005":"",
         "challenging111":"",
         "fiendish017":"",
-        "fiendish017":"",
+        "fiendish071":"",
         "fiendish100":"",
         "fiendish101":"",
         "fiendish102":"",
         "fiendish103":"",
-        "fiendish104":""
+        "fiendish104":"",
+        "BDSymmetrical18Clue":""
     }
 
     $.each(options, function(key,value) {
@@ -700,6 +905,12 @@ function testPuzzle() {
     var posArr = new Array(81);
     for (var i=0; i<81; i++) posArr[i] = "";
     
+    var p004 = "007000063804670900010039002003700600700401005008006100600210090001063508390000700".split("");
+    this.easy004 = new Puzzle(p004, puzToDisArray(p004), posArr);
+
+    var p005 = "981000700307190080004082000700600390200000007013007005000350200060014803002000564".split("");
+    this.easy005 = new Puzzle(p005, puzToDisArray(p005), posArr);
+
     var p111 = "507100008000006005602500003200390000009080100000061002900008301100200000700003506".split("");
     this.challenging111 = new Puzzle(p111,puzToDisArray(p111),posArr);
 
@@ -750,6 +961,9 @@ function testPuzzle() {
 
     var p115 = "060081290090350700000042000200000031605000809370000002000610000003079060026830010".split("");
     this.medium115 = new Puzzle(p115,puzToDisArray(p115),posArr);
+
+    var p18ClueBDSym = "000025000000007300000000480000000059700000002380000000095000000001600000000830000".split("");
+    this.BDSymmetrical18Clue = new Puzzle(p18ClueBDSym, puzToDisArray(p18ClueBDSym), posArr);
 /*
     var _CHANGE_ = "_CHANGE_".split("");
     this._CHANGE_ = new Puzzle(_CHANGE_,puzToDisArray(_CHANGE_),null);
