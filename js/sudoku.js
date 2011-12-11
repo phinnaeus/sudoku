@@ -1,3 +1,6 @@
+// Import the sudokuNode.js file
+$("head").append("<script type='text/javascript' src='js/sudokuNode.js'></script>");
+
 /**
  * The grid of numbers that all the solving methods interact with.
  * Follows the format grid[ROW][COLUMN].
@@ -38,7 +41,104 @@ function createGrid() {
     // Fill the grid with initial values
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
-            //TODO
+            var selector = "td.r" + (row + 1) + ".c" + (col + 1) + ">input";
+            var value = parseInt($(selector).val());
+            if(isNaN(value))
+                grid[row][col] = new sudokuNode(0);
+            else
+                grid[row][col] = new sudokuNode(value);
+
+        }
+    }
+
+    // Update the possibility arrays
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            clearRow(col, row);
+            clearColumn(col, row);
+            clearBox(col, row);
+        }
+    }
+    //alertAllPos();
+    //alertGrid();
+}
+
+// Solving Styles ##############################################################
+var solvingSteps = 0;
+/**
+ * Attempts to solve any single cell in the puzzle
+ */
+function step() {
+    solvingSteps++;
+
+    // Create the grid if it does not already exist
+    if(typeof grid[0][0] === "undefined") {
+        createGrid();
+    }
+
+    // Flags for each solving method
+    var nsFlag, srFlag, scFlag, sbFlag, stuck;
+    nsFlag = srFlag = scFlag = sbFlag = stuck = false;
+
+    nsFlag = nakedSingles(true);
+    if(!nsFlag) {
+        srFlag = singlesInRow(true);
+        if(!srFlag) {
+            scFlag = singlesInColumn(true);
+            if(!scFlag) {
+                sbFlag = singlesInBox(true);
+                if(!sbFlag) {
+                    stuck = true;
+                }
+            }
+        }
+    }
+
+    if(isSolved())
+        $("p#log").text("Solved in " + solvingSteps + " steps");
+    else if(stuck) {
+        if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
+            bruteForce();
+        }
+    }
+}
+
+/**
+ * Attempts to solve every cell in the puzzle
+ */
+function solve() {
+
+    // Create the grid if it does not already exist
+    if(typeof grid[0][0] === "undefined") {
+        createGrid();
+    }
+
+    // Flags for each solving method
+    var nsFlag, srFlag, scFlag, sbFlag, stuck;
+    nsFlag = srFlag = scFlag = sbFlag = stuck = false;
+
+    while(!stuck) {
+        solvingSteps++;
+        nsFlag = nakedSingles();
+        if(!nsFlag) {
+            srFlag = singlesInRow();
+            if(!srFlag) {
+                scFlag = singlesInColumn();
+                if(!scFlag) {
+                    sbFlag = singlesInBox();
+                    if(!sbFlag) {
+                        stuck = true;
+                    }
+                }
+            }
+        }
+    }
+
+    if(isSolved())
+        $("p#log").text("Solved in " + solvingSteps + " steps");
+    else if(stuck) {
+        if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
+            bruteForce();
         }
     }
 }
@@ -56,6 +156,8 @@ function clearRow(column, row) {
         var value = grid[row][column].getValue();
         for(var i = 0; i < 9; i++)
             grid[row][i].setNotPossible(value);
+        
+        //alert("In ROW " + (row + 1) + ", cleared cell r" + (row + 1) + "c" + (column + 1) + " which now has " + grid[row][column].howManyPossible() + " possible values");
     }
 }
 
@@ -70,6 +172,8 @@ function clearColumn(column, row) {
         var value = grid[row][column].getValue();
         for(var i = 0; i < 9; i++)
             grid[i][column].setNotPossible(value);
+
+        //alert("In COLUMN " + (column + 1) + ", cleared cell r" + (row + 1) + "c" + (column + 1) + " which now has " + grid[row][column].howManyPossible() + " possible values");
     }
 }
 
@@ -82,13 +186,15 @@ function clearColumn(column, row) {
 function clearBox(column, row) {
     if(column >= 0 && column < 9 && row >= 0 && row < 9) {
         var value = grid[row][column].getValue();
-        var rOffset = 3 * (row / 3);
-        var cOffset = 3 * (column / 3);
+        var rOffset = 3 * Math.floor(row / 3);
+        var cOffset = 3 * Math.floor(column / 3);
 
         for(var bRow = 0; bRow < 3; bRow++) {
             for(var bCol = 0; bCol < 3; bCol++)
                 grid[bRow + rOffset][bCol + cOffset].setNotPossible(value);
+
         }
+        //alert("In a BOX, cleared cell r" + (row + 1) + "c" + (column + 1) + " which now has " + grid[row][column].howManyPossible() + " possible values");
     }
 }
 
@@ -134,8 +240,8 @@ function checkColumn(col, num) {
  * @return FALSE if num conflicts with other cells in box, TRUE otherwise.
  */
 function checkBox(col, row, num) {
-    var bCol = (col / 3) * 3;
-    var bRow = (row / 3) * 3;
+    var bCol = 3 * Math.floor(col / 3);
+    var bRow = 3 * Math.floor(row / 3);
 
     for(var r = 0; r < 3; r++) {
         for(var c = 0; c < 3; c++) {
@@ -161,23 +267,62 @@ function isSolved() {
                 count++;
         }
     }
-    if(count == 81)
-        return true;
-    else
-        return false;
+    return count == 81;
+}
+
+/**
+ * Displays an alert box with all the values of the sudoku puzzle
+ */
+function alertGrid() {
+    var string = "    A B C D E F G H I";
+    for(var row = 0; row < 9; row++) {
+        var rowString = "\n" + (row + 1) + ":";
+        for(var col = 0; col < 9; col++) {
+            var v = grid[row][col].getValue();
+            if(v == 0)
+                rowString += " ~";
+            else
+            rowString += (" " + v);
+        }
+        string += rowString;
+    }
+    alert(string);
+}
+
+/**
+ * Displays an alert box which lists all the possible values for all unsolved
+ * cells.
+ */
+function alertAllPos() {
+    var string = "CELL | # | POSSIBILITIES";
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            if(grid[row][col].howManyPossible() != 0) {
+                string += "\nR" + (row + 1) + "C" + (col + 1);
+                string += "   " + grid[row][col].howManyPossible() + "   ";
+                for(var i = 1; i < 10; i++) {
+                    if(grid[row][col].isPossible(i))
+                        string += (i + " ");
+                }
+            }
+        }
+    }
+    alert(string);
 }
 
 // Solvers #####################################################################
 
 /**
- * Checks for hidden singles and naked singles in each row.
- * A hidden single arises when there is only one possible cell for a value.
+ * Checks for naked singles.
  * A naked single arises when there is only one possible value for a cell.
  *
- * @returns TRUE if method solves any cells, FALSE otherwise.
+ * @param step Whether the method should do a step-by-step solve
+ * @returns TRUE if method solves any cells, FALSE otherwise
  */
-function singlesInRow() {
+function nakedSingles(step) {
     var flag = false;
+
+    clearPuzzleStyles();
 
     // Check for naked singles
     for(var row = 0; row < 9; row++) {
@@ -191,11 +336,31 @@ function singlesInRow() {
                         clearColumn(col, row);
                         clearBox(col, row);
                         flag = true;
+                        updateProgressBar();
+                        $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                        $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
+                        $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with nakedSingles()");
+                        if(step)
+                            return flag;
                     }
                 }
             }
         }
     }
+    return flag;
+}
+
+/**
+ * Checks for hidden singles and naked singles in each row.
+ * A hidden single arises when there is only one possible cell for a value.
+ * A naked single arises when there is only one possible value for a cell.
+ *
+ * @returns TRUE if method solves any cells, FALSE otherwise.
+ */
+function singlesInRow(step) {
+    var flag = false;
+
+    clearPuzzleStyles();
 
     // Check for hidden singles
     for(var row = 0; row < 9; row++) {
@@ -226,6 +391,12 @@ function singlesInRow() {
                     clearColumn(col, row);
                     clearBox(col,row);
                     flag = true;
+                    updateProgressBar();
+                    $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
+                    $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInRow()");
+                    if(step)
+                        return flag;
                 }
             }
         }
@@ -240,26 +411,10 @@ function singlesInRow() {
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
-function singlesInColumn() {
+function singlesInColumn(step) {
     var flag = false;
 
-    // Check for naked singles
-    for(var col = 0; col < 9; col++) {
-        for(var row = 0; row < 9; row++) {
-            if(grid[row][col].howManyPossible() == 1) {
-                for(var i = 0; i < 9; i++) {
-                    if(grid[row][col].isPossible(i + 1)) {
-                        grid[row][col].setValue(i + 1);
-                        grid[row][col].clearPosValues();
-                        clearRow(col, row);
-                        clearColumn(col, row);
-                        clearBox(col, row);
-                        flag = true;
-                    }
-                }
-            }
-        }
-    }
+    clearPuzzleStyles();
 
     // Check for hidden singles
     for(var col = 0; col < 9; col++) {
@@ -290,6 +445,12 @@ function singlesInColumn() {
                     clearRow(col, row);
                     clearBox(col, row);
                     flag = true;
+                    updateProgressBar();
+                    $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
+                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
+                    $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInColumn()");
+                    if(step)
+                        return flag;
                 }
             }
         }
@@ -304,30 +465,10 @@ function singlesInColumn() {
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
-function singlesInBox() {
+function singlesInBox(step) {
     var flag = false;
 
-    // Check for naked singles
-    for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row travers
-        for(var bCol = 0; bCol < 9; bCol += 3) {        // Inter-box column traversal
-            for(var row = 0; row < 3; row++) {          // Intra-box row traversal
-                for(var col = 0; col < 3; col++) {      // Intra-box column traversal
-                    if(grid[bRow + row][bCol + col].howManyPossible() == 1) {
-                        for(var i = 0; i < 9; i++) {
-                            if(grid[bRow + row][bCol + col].isPossible(i + 1)) {
-                                grid[bRow + row][bCol + col].setValue(i + 1);
-                                grid[bRow + row][bCol + col].clearPosValues();
-                                clearRow(bCol + col, bRow + row);
-                                clearColumn(bCol + col, bRow + row);
-                                clearBox(bCol + col, bRow + row);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-                     
+    clearPuzzleStyles();
 
     // Check for hidden singles
     for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row traversal
@@ -360,6 +501,12 @@ function singlesInBox() {
                             clearRow(bCol + col, bRow + row);
                             clearColumn(bCol + col, bRow + row);
                             flag = true;
+                            updateProgressBar();
+                            $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
+                            $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(single);
+                            $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInBox()");
+                            if(step)
+                                return flag;
                         }
                     }
                 }
@@ -417,13 +564,46 @@ function hiddenTripletInBox() {
     return false;
 }
 
+/**
+ * Attempts to solve the puzzle using brute force tactics. 
+ * recursiveBacktracking() is currently the only method it uses.
+ */
+function bruteForce() {
+    try {
+        recursiveBacktracking(0,0);
+    } catch(e) {
+        $("p#log").text(e);   
+    }
+}
+
+var numRecursions = 0;      // Counter for recursiveBacktracking()
+
+/**
+ * Uses recursive backtracking to solve a sudoku puzzle. Currently only finds
+ * one solution, the first one it finds. Could be made to find all solutions or
+ * to check if the puzzle has a unique solution.
+ *
+ * REQUIRES: numRecursions variable for use as a counter
+ *
+ * @param startingCol The starting column for the next step in the recursion
+ * @param startingRow The starting row for the net step in the recursion
+ */
 function recursiveBacktracking(startingCol, startingRow) {
     var flag = false;
 
+    numRecursions++;        // increment the counter
+
     // Check if puzzle is solved
     if(startingRow > 8) {
-        System.out.println("Solved using brute force.");
-        //TODO: Something to kill all running recursions
+        for(var row = 0; row < 9; row++) {
+            for(var col = 0; col < 9; col++) {
+                if($("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val() == "")
+                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(grid[row][col].getValue());
+            }
+        }
+        updateProgressBar();
+        // End all pending recursions
+        throw "Puzzle solved in " + (numRecursions + 1) + " recursions.";
     } else {
         // If cell is not empty, continue with next cell
         if(grid[startingRow][startingCol].getValue() != 0) {
@@ -673,14 +853,27 @@ function loadTestMenu() {
 
     $("#testSelect").show();
     var options = {
+        "easy004":"",
+        "easy005":"",
+        "medium115":"",
         "challenging111":"",
+        "hard044":"",
+        "hard109":"",
         "fiendish017":"",
-        "fiendish017":"",
+        "fiendish071":"",
         "fiendish100":"",
         "fiendish101":"",
         "fiendish102":"",
         "fiendish103":"",
-        "fiendish104":""
+        "fiendish104":"",
+        "fiendish105":"",
+        "fiendish106":"",
+        "fiendish107":"",
+        "fiendish108":"",
+        "fiendish109":"",
+        "fiendish110":"",
+        "BDSymmetrical18Clue":"",
+        "NWCBruteForce":""
     }
 
     $.each(options, function(key,value) {
@@ -700,56 +893,68 @@ function testPuzzle() {
     var posArr = new Array(81);
     for (var i=0; i<81; i++) posArr[i] = "";
     
-    var p111 = "507100008000006005602500003200390000009080100000061002900008301100200000700003506".split("");
-    this.challenging111 = new Puzzle(p111,puzToDisArray(p111),posArr);
+    var e004 = "007000063804670900010039002003700600700401005008006100600210090001063508390000700".split("");
+    this.easy004 = new Puzzle(e004, puzToDisArray(e004), posArr);
 
-    var p017 = "070006900006007820200005006030040000001602700000070010600200004028700300003500080".split("");
-    this.fiendish017 = new Puzzle(p017,puzToDisArray(p017),posArr);
+    var e005 = "981000700307190080004082000700600390200000007013007005000350200060014803002000564".split("");
+    this.easy005 = new Puzzle(e005, puzToDisArray(e005), posArr);
 
-    var p071 = "007040600000900010209100500000600080006703400030001000008006304090002000003090271".split("");
-    this.fiendish071 = new Puzzle(p071,puzToDisArray(p071),posArr);
+    var c111 = "507100008000006005602500003200390000009080100000061002900008301100200000700003506".split("");
+    this.challenging111 = new Puzzle(c111,puzToDisArray(c111),posArr);
 
-    var p100 = "400000230500070000060009004030507800020030050007806010200900080000010002093000001".split("");
-    this.fiendish100 = new Puzzle(p100,puzToDisArray(p100),posArr);
+    var f017 = "070006900006007820200005006030040000001602700000070010600200004028700300003500080".split("");
+    this.fiendish017 = new Puzzle(f017,puzToDisArray(f017),posArr);
 
-    var p101 = "201080003000507020008000000082100000009408100000005290000000300010709000900010507".split("");
-    this.fiendish101 = new Puzzle(p101,puzToDisArray(p101),posArr);
+    var f071 = "007040600000900010209100500000600080006703400030001000008006304090002000003090271".split("");
+    this.fiendish071 = new Puzzle(f071,puzToDisArray(f071),posArr);
 
-    var p102 = "000900030600030000005680240780000001009000600100000094046027900000060005050008000".split("");
-    this.fiendish102 = new Puzzle(p102,puzToDisArray(p102),posArr);
+    var f100 = "400000230500070000060009004030507800020030050007806010200900080000010002093000001".split("");
+    this.fiendish100 = new Puzzle(f100,puzToDisArray(f100),posArr);
 
-    var p103 = "054800000600007000030040008200004080580030046090600002300080050000200003000003810".split("");
-    this.fiendish103 = new Puzzle(p103,puzToDisArray(p103),posArr);
+    var f101 = "201080003000507020008000000082100000009408100000005290000000300010709000900010507".split("");
+    this.fiendish101 = new Puzzle(f101,puzToDisArray(f101),posArr);
 
-    var p104 = "200009000000070098050810004000040900900267001002080000700054080530090000000100007".split("");
-    this.fiendish104 = new Puzzle(p104,puzToDisArray(p104),posArr);
+    var f102 = "000900030600030000005680240780000001009000600100000094046027900000060005050008000".split("");
+    this.fiendish102 = new Puzzle(f102,puzToDisArray(f102),posArr);
 
-    var p105 = "004001006000500048069008000013900000700000004000007310000300490920006000400700200".split("");
-    this.fiendish105 = new Puzzle(p105,puzToDisArray(p105),posArr);
+    var f103 = "054800000600007000030040008200004080580030046090600002300080050000200003000003810".split("");
+    this.fiendish103 = new Puzzle(f103,puzToDisArray(f103),posArr);
 
-    var p106 = "306000490000605002080004003060007240000000000018300050100500080600803000024000605".split("");
-    this.fiendish106 = new Puzzle(p106,puzToDisArray(p106),posArr);
+    var f104 = "200009000000070098050810004000040900900267001002080000700054080530090000000100007".split("");
+    this.fiendish104 = new Puzzle(f104,puzToDisArray(f104),posArr);
 
-    var p107 = "500103400000025709000000801050000608000407000203000010406000000301560000725901006".split("");
-    this.fiendish107 = new Puzzle(p107,puzToDisArray(p107),posArr);
+    var f105 = "004001006000500048069008000013900000700000004000007310000300490920006000400700200".split("");
+    this.fiendish105 = new Puzzle(f105,puzToDisArray(f105),posArr);
 
-    var p108 = "980020010400003000300800072030040000200301007000090030170002006000400009040030081".split("");
-    this.fiendish108 = new Puzzle(p108,puzToDisArray(p108),posArr);
+    var f106 = "306000490000605002080004003060007240000000000018300050100500080600803000024000605".split("");
+    this.fiendish106 = new Puzzle(f106,puzToDisArray(f106),posArr);
 
-    var p109 = "109020050870000000240306000050001000004030500000900020000509082000000061090070405".split("");
-    this.fiendish109 = new Puzzle(p109,puzToDisArray(p109),posArr);
+    var f107 = "500103400000025709000000801050000608000407000203000010406000000301560000725901006".split("");
+    this.fiendish107 = new Puzzle(f107,puzToDisArray(f107),posArr);
 
-    var p110 = "006000405000640009200090360513020800000000000008030951072050004100079000309000500".split("");
-    this.fiendish110 = new Puzzle(p110,puzToDisArray(p110),posArr);
+    var f108 = "980020010400003000300800072030040000200301007000090030170002006000400009040030081".split("");
+    this.fiendish108 = new Puzzle(f108,puzToDisArray(f108),posArr);
 
-    var p044 = "060003820004000600005640003020009000008000200000800010500067400001000500072500030".split("");
-    this.hard044 = new Puzzle(p044,puzToDisArray(p044),posArr);
+    var f109 = "109020050870000000240306000050001000004030500000900020000509082000000061090070405".split("");
+    this.fiendish109 = new Puzzle(f109,puzToDisArray(f109),posArr);
 
-    var p109 = "000610400680700190104000007000439008000000000700285000800000703079003016001067000".split("");
-    this.hard109 = new Puzzle(p109,puzToDisArray(p109),posArr);
+    var f110 = "006000405000640009200090360513020800000000000008030951072050004100079000309000500".split("");
+    this.fiendish110 = new Puzzle(f110,puzToDisArray(f110),posArr);
 
-    var p115 = "060081290090350700000042000200000031605000809370000002000610000003079060026830010".split("");
-    this.medium115 = new Puzzle(p115,puzToDisArray(p115),posArr);
+    var h044 = "060003820004000600005640003020009000008000200000800010500067400001000500072500030".split("");
+    this.hard044 = new Puzzle(h044,puzToDisArray(h044),posArr);
+
+    var h109 = "000610400680700190104000007000439008000000000700285000800000703079003016001067000".split("");
+    this.hard109 = new Puzzle(h109,puzToDisArray(h109),posArr);
+
+    var m115 = "060081290090350700000042000200000031605000809370000002000610000003079060026830010".split("");
+    this.medium115 = new Puzzle(m115,puzToDisArray(m115),posArr);
+
+    var BDSym18Clue = "000025000000007300000000480000000059700000002380000000095000000001600000000830000".split("");
+    this.BDSymmetrical18Clue = new Puzzle(BDSym18Clue, puzToDisArray(BDSym18Clue), posArr);
+
+    var pNWCBruteForce = "000000000000003085001020000000507000004000100090000000500000073002010000000040009".split("");
+    this.NWCBruteForce = new Puzzle(pNWCBruteForce, puzToDisArray(pNWCBruteForce), posArr);
 /*
     var _CHANGE_ = "_CHANGE_".split("");
     this._CHANGE_ = new Puzzle(_CHANGE_,puzToDisArray(_CHANGE_),null);
