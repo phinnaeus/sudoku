@@ -64,35 +64,41 @@ function createGrid() {
 }
 
 // Solving Styles ##############################################################
-
+var solvingSteps = 0;
 /**
  * Attempts to solve any single cell in the puzzle
  */
 function step() {
+    solvingSteps++;
+
     // Create the grid if it does not already exist
     if(typeof grid[0][0] === "undefined") {
         createGrid();
     }
 
     // Flags for each solving method
-    var srFlag, scFlag, sbFlag, stuck;
-    srFlag = scFlag = sbFlag = stuck = false;
+    var nsFlag, srFlag, scFlag, sbFlag, stuck;
+    nsFlag = srFlag = scFlag = sbFlag = stuck = false;
 
-    srFlag = singlesInRow(true);
-    if(srFlag) {
-    } else {
-        scFlag = singlesInColumn(true);
-        if(scFlag) {
-        } else {
-            sbFlag = singlesInBox(true);
-            if(sbFlag) {
-            } else {
-                stuck = true;
-                var brute = confirm("Stuck! Should I use brute force?");
-                if(brute) {
-                    bruteForce();
+    nsFlag = nakedSingles(true);
+    if(!nsFlag) {
+        srFlag = singlesInRow(true);
+        if(!srFlag) {
+            scFlag = singlesInColumn(true);
+            if(!scFlag) {
+                sbFlag = singlesInBox(true);
+                if(!sbFlag) {
+                    stuck = true;
                 }
             }
+        }
+    }
+
+    if(isSolved())
+        $("p#log").text("Solved in " + solvingSteps + " steps");
+    else if(stuck) {
+        if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
+            bruteForce();
         }
     }
 }
@@ -101,33 +107,37 @@ function step() {
  * Attempts to solve every cell in the puzzle
  */
 function solve() {
+
     // Create the grid if it does not already exist
     if(typeof grid[0][0] === "undefined") {
         createGrid();
     }
 
     // Flags for each solving method
-    var srFlag, scFlag, sbFlag, stuck;
-    srFlag = scFlag = sbFlag = stuck = false;
+    var nsFlag, srFlag, scFlag, sbFlag, stuck;
+    nsFlag = srFlag = scFlag = sbFlag = stuck = false;
 
     while(!stuck) {
-        srFlag = singlesInRow();
-        if(srFlag) {
-        } else {
-            scFlag = singlesInColumn();
-            if(scFlag) {
-            } else {
-                sbFlag = singlesInBox();
-                if(sbFlag) {
-                } else {
-                    stuck = true;
+        solvingSteps++;
+        nsFlag = nakedSingles();
+        if(!nsFlag) {
+            srFlag = singlesInRow();
+            if(!srFlag) {
+                scFlag = singlesInColumn();
+                if(!scFlag) {
+                    sbFlag = singlesInBox();
+                    if(!sbFlag) {
+                        stuck = true;
+                    }
                 }
             }
         }
     }
 
-    if(stuck) {
-        if(confirm("Stuck! Should I use brute force?")) {
+    if(isSolved())
+        $("p#log").text("Solved in " + solvingSteps + " steps");
+    else if(stuck) {
+        if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
             bruteForce();
         }
     }
@@ -146,6 +156,8 @@ function clearRow(column, row) {
         var value = grid[row][column].getValue();
         for(var i = 0; i < 9; i++)
             grid[row][i].setNotPossible(value);
+        
+        //alert("In ROW " + (row + 1) + ", cleared cell r" + (row + 1) + "c" + (column + 1) + " which now has " + grid[row][column].howManyPossible() + " possible values");
     }
 }
 
@@ -160,6 +172,8 @@ function clearColumn(column, row) {
         var value = grid[row][column].getValue();
         for(var i = 0; i < 9; i++)
             grid[i][column].setNotPossible(value);
+
+        //alert("In COLUMN " + (column + 1) + ", cleared cell r" + (row + 1) + "c" + (column + 1) + " which now has " + grid[row][column].howManyPossible() + " possible values");
     }
 }
 
@@ -174,12 +188,13 @@ function clearBox(column, row) {
         var value = grid[row][column].getValue();
         var rOffset = 3 * Math.floor(row / 3);
         var cOffset = 3 * Math.floor(column / 3);
-        //alert("rOffset: " + rOffset + " cOffset: " + cOffset);
 
         for(var bRow = 0; bRow < 3; bRow++) {
             for(var bCol = 0; bCol < 3; bCol++)
                 grid[bRow + rOffset][bCol + cOffset].setNotPossible(value);
+
         }
+        //alert("In a BOX, cleared cell r" + (row + 1) + "c" + (column + 1) + " which now has " + grid[row][column].howManyPossible() + " possible values");
     }
 }
 
@@ -298,13 +313,13 @@ function alertAllPos() {
 // Solvers #####################################################################
 
 /**
- * Checks for hidden singles and naked singles in each row.
- * A hidden single arises when there is only one possible cell for a value.
+ * Checks for naked singles.
  * A naked single arises when there is only one possible value for a cell.
  *
- * @returns TRUE if method solves any cells, FALSE otherwise.
+ * @param step Whether the method should do a step-by-step solve
+ * @returns TRUE if method solves any cells, FALSE otherwise
  */
-function singlesInRow(step) {
+function nakedSingles(step) {
     var flag = false;
 
     clearPuzzleStyles();
@@ -324,6 +339,7 @@ function singlesInRow(step) {
                         updateProgressBar();
                         $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                         $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
+                        $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with nakedSingles()");
                         if(step)
                             return flag;
                     }
@@ -331,6 +347,20 @@ function singlesInRow(step) {
             }
         }
     }
+    return flag;
+}
+
+/**
+ * Checks for hidden singles and naked singles in each row.
+ * A hidden single arises when there is only one possible cell for a value.
+ * A naked single arises when there is only one possible value for a cell.
+ *
+ * @returns TRUE if method solves any cells, FALSE otherwise.
+ */
+function singlesInRow(step) {
+    var flag = false;
+
+    clearPuzzleStyles();
 
     // Check for hidden singles
     for(var row = 0; row < 9; row++) {
@@ -364,6 +394,7 @@ function singlesInRow(step) {
                     updateProgressBar();
                     $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                     $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
+                    $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInRow()");
                     if(step)
                         return flag;
                 }
@@ -384,29 +415,6 @@ function singlesInColumn(step) {
     var flag = false;
 
     clearPuzzleStyles();
-
-    // Check for naked singles
-    for(var col = 0; col < 9; col++) {
-        for(var row = 0; row < 9; row++) {
-            if(grid[row][col].howManyPossible() == 1) {
-                for(var i = 0; i < 9; i++) {
-                    if(grid[row][col].isPossible(i + 1)) {
-                        grid[row][col].setValue(i + 1);
-                        grid[row][col].clearPosValues();
-                        clearRow(col, row);
-                        clearColumn(col, row);
-                        clearBox(col, row);
-                        flag = true;
-                        updateProgressBar();
-                        $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
-                        $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
-                        if(step)
-                            return flag;
-                    }
-                }
-            }
-        }
-    }
 
     // Check for hidden singles
     for(var col = 0; col < 9; col++) {
@@ -440,6 +448,7 @@ function singlesInColumn(step) {
                     updateProgressBar();
                     $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                     $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
+                    $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInColumn()");
                     if(step)
                         return flag;
                 }
@@ -460,34 +469,6 @@ function singlesInBox(step) {
     var flag = false;
 
     clearPuzzleStyles();
-
-    // Check for naked singles
-    for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row travers
-        for(var bCol = 0; bCol < 9; bCol += 3) {        // Inter-box column traversal
-            for(var row = 0; row < 3; row++) {          // Intra-box row traversal
-                for(var col = 0; col < 3; col++) {      // Intra-box column traversal
-                    if(grid[bRow + row][bCol + col].howManyPossible() == 1) {
-                        for(var i = 0; i < 9; i++) {
-                            if(grid[bRow + row][bCol + col].isPossible(i + 1)) {
-                                grid[bRow + row][bCol + col].setValue(i + 1);
-                                grid[bRow + row][bCol + col].clearPosValues();
-                                clearRow(bCol + col, bRow + row);
-                                clearColumn(bCol + col, bRow + row);
-                                clearBox(bCol + col, bRow + row);
-                                flag = true;
-                                updateProgressBar();
-                                $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
-                                $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(i + 1);
-                                if(step)
-                                    return flag;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-                     
 
     // Check for hidden singles
     for(var bRow = 0; bRow < 9; bRow += 3) {            // Inter-box row traversal
@@ -523,6 +504,7 @@ function singlesInBox(step) {
                             updateProgressBar();
                             $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
                             $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(single);
+                            $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInBox()");
                             if(step)
                                 return flag;
                         }
@@ -590,7 +572,7 @@ function bruteForce() {
     try {
         recursiveBacktracking(0,0);
     } catch(e) {
-        alert(e);   
+        $("p#log").text(e);   
     }
 }
 
@@ -621,7 +603,7 @@ function recursiveBacktracking(startingCol, startingRow) {
         }
         updateProgressBar();
         // End all pending recursions
-        throw "Puzzle required " + (numRecursions + 1) + " recursions.";
+        throw "Puzzle solved in " + (numRecursions + 1) + " recursions.";
     } else {
         // If cell is not empty, continue with next cell
         if(grid[startingRow][startingCol].getValue() != 0) {
@@ -875,7 +857,14 @@ function loadTestMenu() {
         "fiendish102":"",
         "fiendish103":"",
         "fiendish104":"",
-        "BDSymmetrical18Clue":""
+        "fiendish105":"",
+        "fiendish106":"",
+        "fiendish107":"",
+        "fiendish108":"",
+        "fiendish109":"",
+        "fiendish110":"",
+        "BDSymmetrical18Clue":"",
+        "NWCBruteForce":""
     }
 
     $.each(options, function(key,value) {
@@ -954,6 +943,9 @@ function testPuzzle() {
 
     var BDSym18Clue = "000025000000007300000000480000000059700000002380000000095000000001600000000830000".split("");
     this.BDSymmetrical18Clue = new Puzzle(BDSym18Clue, puzToDisArray(BDSym18Clue), posArr);
+
+    var pNWCBruteForce = "000000000000003085001020000000507000004000100090000000500000073002010000000040009".split("");
+    this.NWCBruteForce = new Puzzle(pNWCBruteForce, puzToDisArray(pNWCBruteForce), posArr);
 /*
     var _CHANGE_ = "_CHANGE_".split("");
     this._CHANGE_ = new Puzzle(_CHANGE_,puzToDisArray(_CHANGE_),null);
