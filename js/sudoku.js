@@ -59,12 +59,15 @@ function createGrid() {
             clearBox(col, row);
         }
     }
+
     //alertAllPos();
     //alertGrid();
 }
 
 // Solving Styles ##############################################################
+
 var solvingSteps = 0;
+
 /**
  * Attempts to solve any single cell in the puzzle
  */
@@ -98,6 +101,7 @@ function step() {
         $("p#log").text("Solved in " + solvingSteps + " steps");
     else if(stuck) {
         if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
+            clearNotes();
             bruteForce();
         }
     }
@@ -107,6 +111,9 @@ function step() {
  * Attempts to solve every cell in the puzzle
  */
 function solve() {
+
+    // Clear notes
+    clearNotes();
 
     // Create the grid if it does not already exist
     if(typeof grid[0][0] === "undefined") {
@@ -340,8 +347,10 @@ function nakedSingles(step) {
                         $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                         $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(i + 1);
                         $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with nakedSingles()");
-                        if(step)
+                        if(step) {
+                            updateNotes(col, row);
                             return flag;
+                        }
                     }
                 }
             }
@@ -351,9 +360,8 @@ function nakedSingles(step) {
 }
 
 /**
- * Checks for hidden singles and naked singles in each row.
+ * Checks for hidden singles in each row.
  * A hidden single arises when there is only one possible cell for a value.
- * A naked single arises when there is only one possible value for a cell.
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
@@ -395,8 +403,10 @@ function singlesInRow(step) {
                     $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                     $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
                     $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInRow()");
-                    if(step)
+                    if(step) {
+                        updateNotes(col, row);
                         return flag;
+                    }
                 }
             }
         }
@@ -405,9 +415,8 @@ function singlesInRow(step) {
 }
 
 /**
- * Checks for hidden singles and naked singles in each column.
+ * Checks for hidden singles in each column.
  * A hidden single arises when there is only one possible cell for a value.
- * A naked single arises when there is only one possible value for a cell.
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
@@ -449,8 +458,10 @@ function singlesInColumn(step) {
                     $("td.r" + (row + 1) + ".c" + (col + 1)).css("background-color","#99CCFF");
                     $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(single);
                     $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInColumn()");
-                    if(step)
+                    if(step) {
+                        updateNotes(col, row);
                         return flag;
+                    }
                 }
             }
         }
@@ -459,9 +470,8 @@ function singlesInColumn(step) {
 }
 
 /**
- * Check for hidden singles and naked singles in each box.
+ * Check for hidden singles in each box.
  * A hidden single arises when there is only one possible cell for a value.
- * A naked single arises when there is only one possible value for a cell.
  *
  * @returns TRUE if method solves any cells, FALSE otherwise.
  */
@@ -504,9 +514,11 @@ function singlesInBox(step) {
                             updateProgressBar();
                             $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1)).css("background-color","#99CCFF");
                             $("td.r" + (bRow + row + 1) + ".c" + (bCol + col + 1) + ">input").val(single);
-                            $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with singlesInBox()");
-                            if(step)
+                            $("p#log").text("r" + (bRow + row + 1) + "c" + (bCol + col + 1) + " solved with singlesInBox()");
+                            if(step) {
+                                updateNotes(bCol + col, bRow + row);
                                 return flag;
+                            }
                         }
                     }
                 }
@@ -636,7 +648,83 @@ function recursiveBacktracking(startingCol, startingRow) {
     return flag;
 }
 
-// helpers
+// Helpers #####################################################################
+
+/**
+ * Creates the initial possible value notes.
+ * Creates the grid array if it doesn't exist.
+ */
+function displayNotes() {
+    // Create the grid if it doesn't already exist
+    if(typeof grid[0][0] === "undefined") {
+        createGrid();
+    }
+    
+    // Fill the Notes spans
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            if(grid[row][col].howManyPossible() > 0) {
+                for(var i = 1; i < 10; i++) {
+                    if(grid[row][col].isPossible(i))
+                        $("td.r" + (row + 1) + ".c" + (col + 1) + " span.possibles" + i).text(i);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Updates the notes for all neighboring cells.
+ *
+ * @param col The column of the cell that was updated
+ * @param row The row of the cell that was updated
+ */
+function updateNotes(col, row) {
+    var value = grid[row][col].getValue();
+
+    // Clear notes in the solved cell
+    for(var i = 1; i < 10; i++) {
+        $("td.r" + (row + 1) + ".c" + (col + 1) + " span.possibles" + i).html("&nbsp;");
+    }
+
+    // Update notes in the row
+    for(var nCol = 0; nCol < 9; nCol++) {
+        if(grid[row][nCol].howManyPossible() > 0) {
+            $("td.r" + (row + 1) + ".c" + (nCol + 1) + " span.possibles" + value).html("&nbsp;");
+        }
+    }
+
+    // Update notes in the column
+    for(var nRow = 0; nRow < 9; nRow++) {
+        if(grid[nRow][col].howManyPossible() > 0) {
+            $("td.r" + (nRow + 1) + ".c" + (col + 1) + " span.possibles" + value).html("&nbsp;");
+        }
+    }
+
+    // Update notes in the box
+    var bCol = 3 * Math.floor(col / 3);
+    var bRow = 3 * Math.floor(row / 3);
+
+    for(var r = 0; r < 3; r++) {
+        for(var c = 0; c < 3; c++) {
+            if(grid[bRow + r][bCol + c].howManyPossible() > 0) {
+                $("td.r" + (bRow + r + 1) + ".c" + (bCol + c + 1) + " span.possibles" + value).html("&nbsp;");
+             }
+        }
+    }
+}
+
+/**
+ * Clear the notes from all cells
+ */
+function clearNotes() {
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            for(var i = 1; i < 10; i++)
+                $("td.r" + (row + 1) + ".c" + (col + 1) + " span.possibles" + i).html("&nbsp;");
+        }
+    }
+}
 
 function highlightRow(row, col) {
     clearPuzzleStyles();

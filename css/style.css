@@ -156,6 +156,60 @@ body {
                 color: #111;
                 background-color: transparent;
             }
+        .possibles1 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -35px;
+            margin-left: -13px;
+        }
+        .possibles2 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -35px;
+            margin-left: 0px;
+        }
+        .possibles3 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -35px;
+            margin-left: 14px;
+        }
+        .possibles4 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -23px;
+            margin-left: -13px;
+        }
+        .possibles5 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -23px;
+            margin-left: 0px;
+        }
+        .possibles6 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -23px;
+            margin-left: 14px;
+        }
+        .possibles7 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -11px;
+            margin-left: -13px;
+        }
+        .possibles8 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -11px;
+            margin-left: 0px;
+        }
+        .possibles9 {
+            position: absolute;
+            font-size: 9px;
+            margin-top: -11px;
+            margin-left: 14px;
+        }
         .possibles {
             position: absolute;
             font-size: 9px;
