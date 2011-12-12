@@ -111,6 +111,8 @@ function step() {
  * Attempts to solve every cell in the puzzle
  */
 function solve() {
+    // Timer
+    var seconds = new Date().getTime();
 
     // Clear notes
     clearNotes();
@@ -125,7 +127,7 @@ function solve() {
     nsFlag = srFlag = scFlag = sbFlag = stuck = false;
 
     while(!stuck) {
-        solvingSteps++;
+        //solvingSteps++;
         nsFlag = nakedSingles();
         if(!nsFlag) {
             srFlag = singlesInRow();
@@ -141,9 +143,10 @@ function solve() {
         }
     }
 
-    if(isSolved())
-        $("p#log").text("Solved in " + solvingSteps + " steps");
-    else if(stuck) {
+    if(isSolved()) {
+        //$("p#log").text("Solved in " + solvingSteps + " steps");
+        $("p#log").text("Solved in " + ((new Date().getTime() - seconds) / 1000) + " seconds");
+    } else if(stuck) {
         if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
             bruteForce();
         }
@@ -581,10 +584,11 @@ function hiddenTripletInBox() {
  * recursiveBacktracking() is currently the only method it uses.
  */
 function bruteForce() {
+    var startTime = new Date().getTime();
     try {
         recursiveBacktracking(0,0);
     } catch(e) {
-        $("p#log").text(e);   
+        $("p#log").html("Puzzle solved in " + ((new Date().getTime() - startTime) / 1000) + " seconds" + "<br />" + e + " recursions were required to solve");   
     }
 }
 
@@ -615,7 +619,7 @@ function recursiveBacktracking(startingCol, startingRow) {
         }
         updateProgressBar();
         // End all pending recursions
-        throw "Puzzle solved in " + (numRecursions + 1) + " recursions.";
+        throw (numRecursions);
     } else {
         // If cell is not empty, continue with next cell
         if(grid[startingRow][startingCol].getValue() != 0) {
@@ -651,10 +655,26 @@ function recursiveBacktracking(startingCol, startingRow) {
 // Helpers #####################################################################
 
 /**
+ * Toggles the visibility of the notes.
+ * REQUIRES: notesVisible toggle
+ */
+var notesVisible = false;
+function notes() {
+    if(notesVisible) {
+        notesVisible = false;
+        clearNotes();
+    }
+    else {
+        notesVisible = true;
+        createNotes();
+    }
+}
+
+/**
  * Creates the initial possible value notes.
  * Creates the grid array if it doesn't exist.
  */
-function displayNotes() {
+function createNotes() {
     // Create the grid if it doesn't already exist
     if(typeof grid[0][0] === "undefined") {
         createGrid();
@@ -676,40 +696,43 @@ function displayNotes() {
 /**
  * Updates the notes for all neighboring cells.
  *
+ * REQUIRES: notesVisible toggle
  * @param col The column of the cell that was updated
  * @param row The row of the cell that was updated
  */
 function updateNotes(col, row) {
-    var value = grid[row][col].getValue();
-
-    // Clear notes in the solved cell
-    for(var i = 1; i < 10; i++) {
-        $("td.r" + (row + 1) + ".c" + (col + 1) + " span.possibles" + i).html("&nbsp;");
-    }
-
-    // Update notes in the row
-    for(var nCol = 0; nCol < 9; nCol++) {
-        if(grid[row][nCol].howManyPossible() > 0) {
-            $("td.r" + (row + 1) + ".c" + (nCol + 1) + " span.possibles" + value).html("&nbsp;");
+    if(notesVisible) {
+        var value = grid[row][col].getValue();
+    
+        // Clear notes in the solved cell
+        for(var i = 1; i < 10; i++) {
+            $("td.r" + (row + 1) + ".c" + (col + 1) + " span.possibles" + i).html("&nbsp;");
         }
-    }
 
-    // Update notes in the column
-    for(var nRow = 0; nRow < 9; nRow++) {
-        if(grid[nRow][col].howManyPossible() > 0) {
-            $("td.r" + (nRow + 1) + ".c" + (col + 1) + " span.possibles" + value).html("&nbsp;");
+        // Update notes in the row
+        for(var nCol = 0; nCol < 9; nCol++) {
+            if(grid[row][nCol].howManyPossible() > 0) {
+                $("td.r" + (row + 1) + ".c" + (nCol + 1) + " span.possibles" + value).html("&nbsp;");
+            }
         }
-    }
 
-    // Update notes in the box
-    var bCol = 3 * Math.floor(col / 3);
-    var bRow = 3 * Math.floor(row / 3);
+        // Update notes in the column
+        for(var nRow = 0; nRow < 9; nRow++) {
+            if(grid[nRow][col].howManyPossible() > 0) {
+                $("td.r" + (nRow + 1) + ".c" + (col + 1) + " span.possibles" + value).html("&nbsp;");
+            }
+        }
 
-    for(var r = 0; r < 3; r++) {
-        for(var c = 0; c < 3; c++) {
-            if(grid[bRow + r][bCol + c].howManyPossible() > 0) {
-                $("td.r" + (bRow + r + 1) + ".c" + (bCol + c + 1) + " span.possibles" + value).html("&nbsp;");
-             }
+        // Update notes in the box
+        var bCol = 3 * Math.floor(col / 3);
+        var bRow = 3 * Math.floor(row / 3);
+
+        for(var r = 0; r < 3; r++) {
+            for(var c = 0; c < 3; c++) {
+                if(grid[bRow + r][bCol + c].howManyPossible() > 0) {
+                    $("td.r" + (bRow + r + 1) + ".c" + (bCol + c + 1) + " span.possibles" + value).html("&nbsp;");
+                }
+            }
         }
     }
 }
