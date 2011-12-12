@@ -786,6 +786,15 @@ function hideButtons() {
     $(".hidden").hide();
 }
 
+function updateCell(row, col, value) {
+    if (value > 9 || value < 1) return false;
+    var cellSelector = "#puzzle .r" + row + ".c" + col + " input";
+    $(cellSelector).val(value);
+    updateButtons();
+    updateProgressBar();
+    return true;
+}
+
 function displayPuzzle(puz) {
     clearPuzzle();
     $("#puzzle input").each(function(index) {
