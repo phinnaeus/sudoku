@@ -23,7 +23,7 @@ function randomShittyPuzzle() {
                 $(cell).val(puzzle[j-1]);
                 $(cell).attr("disabled", "disabled");
             } else if (rands() < 2) {
-                $(cell).next().text(rands() + " " + rands());
+               // $(cell).next().text(rands() + " " + rands());
             }
         }
         if (i%3 == 0) puzzle = offset(puzzle,1);
@@ -97,8 +97,9 @@ function step() {
         }
     }
 
-    if(isSolved())
+    if(isSolved()) {
         $("p#log").text("Solved in " + solvingSteps + " steps");
+    }
     else if(stuck) {
         if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
             clearNotes();
