@@ -2,7 +2,7 @@
 $(document).ready(function(){
     
     clearPuzzle();
-    loadTestMenu();
+//    loadTestMenu();
 //    showButtons();
     
     $("#puzzle input").autotab_filter("numeric").autotab_magic().on('change', function() {
