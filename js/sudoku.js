@@ -936,8 +936,8 @@ function displayDifficulty(diff) {
 
 // test puzzles
 
-function grabPuzzle(difficulty) {
-    if (difficulty < 1 || difficulty > 4) return false;
+function grabPuzzle(difficulty, id) {
+    if (difficulty < 1 || difficulty > 4 || id < 1 || id > 13) return false;
 
     var diffMap = ["", "m", "c", "h", "f"];
 
@@ -945,7 +945,9 @@ function grabPuzzle(difficulty) {
     for (var i=0; i<81; i++) posArr[i] = "";
     
     var url = "testpuzzles/";
-    var num = Math.ceil(Math.random()*13);
+    var num;
+    if (arguments.length > 1) num = id;
+    else num = Math.ceil(Math.random()*13);
     url += diffMap[difficulty] + num + ".txt";
 
     $.get(url, function(data) {
