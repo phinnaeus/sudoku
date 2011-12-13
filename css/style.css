@@ -156,7 +156,7 @@ body {
                 color: #111;
                 background-color: transparent;
             }
-        .possibles1 {
+/*        .possibles1 {
             position: absolute;
             font-size: 9px;
             margin-top: -35px;
@@ -210,11 +210,56 @@ body {
             margin-top: -11px;
             margin-left: 14px;
         }
-        .possibles {
-            position: absolute;
-            font-size: 9px;
-            margin-left: -33px;
+        table.possibles {
+            height: 35px;
+            width: 35px;
+            border-collapse: collapse;
         }
+        td.poss1 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss2 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss3 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss4 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss5 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss6 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss7 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss8 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }
+        td.poss9 {
+            height: 10px;
+            width: 10px;
+            font-size: 9px;
+        }                                                                   */
     .r1 { border-top-width: 2px!important; }
     .r3, .r6, .r9 { border-bottom-width: 2px!important; }
     .c1 { border-left-width: 2px!important; }

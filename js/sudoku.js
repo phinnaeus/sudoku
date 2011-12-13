@@ -292,7 +292,7 @@ function alertAllPos() {
             }
         }
     }
-    alert(string);
+    console.log(string);
 }
 
 // Solvers #####################################################################
@@ -666,6 +666,8 @@ function createNotes() {
             }
         }
     }
+
+    alertAllPos();
 }
 
 /**
