@@ -2,13 +2,15 @@
 $(document).ready(function(){
     
     clearPuzzle();
-//    loadTestMenu();
 //    showButtons();
     
     $("#puzzle input").autotab_filter("numeric").autotab_magic().on('change', function() {
         updateProgressBar();
         updateButtons();
     });
+
+    if (getDifficulty() == "") setDifficulty(4);
+    else displayDifficulty(getDifficulty());
 	
     //this function attached focus and blur events with input elements
 	var addFocusAndBlur = function($input, $val){

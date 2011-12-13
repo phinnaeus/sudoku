@@ -925,6 +925,28 @@ Storage.prototype.getObject = function(key, value) {
     return JSON.parse(this.getItem(key));
 }
 
+function getDifficulty() {
+    return localStorage.getItem("davistm+coleycj_diff");
+}
+
+function setDifficulty(diff) {
+    try {
+        localStorage.setItem("davistm+coleycj_diff",diff);
+        displayDifficulty(diff);
+    } catch (e) {
+        if (e == QUOTA_EXCEEDED_ERR) {
+            alert("well, fuck. we ran out of room.");
+        } else alert(e);
+    }
+}
+
+function displayDifficulty(diff) {
+    $(".difficultyOrbs").removeClass("on").addClass("off");
+    for (; diff>=1; diff--) {
+        $("#orb" + diff).addClass("on");
+    }
+}
+
 // test puzzles
 
 function grabPuzzle(difficulty) {

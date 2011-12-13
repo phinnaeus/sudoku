@@ -119,14 +119,12 @@ body {
             margin-left: 3px;
             float: right;
             background: url("../images/puzzleDifficulty_sprite.png") no-repeat;
+            background-position: 0px 0px;
         }
             .difficultyOrbs.on {
-                background-position: 0px 0px;
-            }
-            .difficultyOrbs.off {
                 background-position: 0px -20px;
             }
-
+            
 #puzzle {
     height: 333px;
     width: 333px;
