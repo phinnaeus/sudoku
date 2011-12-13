@@ -38,6 +38,15 @@ function createGrid() {
     //alertGrid();
 }
 
+/**
+ * Clears the grid by reinitializing the 1st dimension of the array
+ */
+function clearGrid() {
+    for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
+        grid[r] = new Array(9);
+    }
+}
+
 // Solving Styles ##############################################################
 
 var solvingSteps = 0;
@@ -769,6 +778,11 @@ function clearPuzzle() {
     clearPuzzleStyles();
     updateButtons();
     updateProgressBar();
+
+    // Reset all necessary backend stuff
+    clearGrid();
+    $("#log").text("");
+    numRecursions = 0;
 }
 
 function updateButtons() {
