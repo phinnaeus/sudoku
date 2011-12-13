@@ -4,7 +4,9 @@ $(document).ready(function(){
     clearPuzzle();
 //    showButtons();
     
-    $("#puzzle input").autotab_filter("numeric").autotab_magic().on('change', function() {
+    $("#puzzle input")
+        .autotab_filter({format: 'custom', pattern: '[^1-9]' })
+        .autotab_magic().on('change', function() {
         updateProgressBar();
         updateButtons();
     });
