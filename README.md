@@ -20,12 +20,6 @@ cell, allowing the user to save possible values for each cell.
 Currently Implemented Methods
 -----------------------------
 
-* **randomShittyPuzzle**
-
-    A throwaway method, simply there to generate technically valid
-    puzzles. Needs to be replaced. Uses helper methods genRow, 
-    shuffle, rands, and offset.
-
 * **highlightRow**
 
     Pass a row and column, this function will visually highlight an
@@ -97,9 +91,3 @@ Currently Implemented Methods
     
     Updates the progress bar displayed (if supported) below the
     puzzle to reflect the percentage of cells completed.
-
-* genRow
-* rands
-* shuffle
-* offset
-
