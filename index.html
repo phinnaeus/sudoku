@@ -23,7 +23,7 @@
         <div id="leftMenu">
             <button class="hidden" onclick="savePuzzle(puzzleToObject());"><span class="icon downarrow"></span>Save</button>
             <button onclick="displayPuzzle(loadPuzzle());"><span class="icon uparrow"></span>Load</button>
-            <button><span class="icon pen"></span>Print</button>
+            <!--<button><span class="icon pen"></span>Print</button>-->
             <button class="hidden negative" onclick="clearPuzzle();"><span class="icon cross"></span>Clear</button>
         </div>
 
@@ -225,7 +225,7 @@
     </div>
 
         <div id="rightMenu">
-            <button onclick="grabPuzzle(4);"><span class="icon plus"></span>New</button>
+            <button onclick="grabPuzzle(currentDifficulty);"><span class="icon plus"></span>New</button>
             <!--<button onclick="notes();" class="hidden"><span class="icon tag"></span>Notes</button>-->
             <button onclick="step();" class="hidden"><span class="icon rightarrow"></span>Next</button>
             <button onclick="solve();" class="hidden positive"><span class="icon check"></span>Solve</button>
