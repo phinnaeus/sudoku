@@ -12,6 +12,7 @@ function sudokuNode(val) {
     this.isPossible = isPossible;
     this.howManyPossible = howManyPossible;
     this.clearPosValues = clearPosValues;
+    this.getPosValues = getPosValues;
 }
 
 function setPossible(number) {
@@ -26,6 +27,10 @@ function setNotPossible(number) {
         this.posValues[number] = false;
         this.posValues[0] -= 1;
     }
+}
+
+function getPosValues() {
+    return this.posValues.slice(1);
 }
 
 function isPossible(number) {

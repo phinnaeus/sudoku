@@ -107,8 +107,8 @@ function solve() {
     }
 
     // Flags for each solving method
-    var nsFlag, srFlag, scFlag, sbFlag, stuck;
-    nsFlag = srFlag = scFlag = sbFlag = stuck = false;
+    var nsFlag, srFlag, scFlag, sbFlag, nprFlag, stuck;
+    nsFlag = srFlag = scFlag = sbFlag = nprFlag = stuck = false;
 
     while(!stuck) {
         //solvingSteps++;
@@ -120,7 +120,10 @@ function solve() {
                 if(!scFlag) {
                     sbFlag = singlesInBox();
                     if(!sbFlag) {
-                        stuck = true;
+                        nprFlag = nakedPairInRow();
+                        if(!nprFlag) {
+                            stuck = true;
+                        }
                     }
                 }
             }
@@ -280,7 +283,7 @@ function alertGrid() {
         }
         string += rowString;
     }
-    alert(string);
+    console.log(string);
 }
 
 /**
@@ -516,6 +519,16 @@ function singlesInBox(step) {
 }
 
 function nakedPairInRow() {
+    var possArray = new Array(9)
+    for(var row = 0; row < 9; row++) {
+        for(var col = 0; col < 9; col++) {
+            possArray[row] = grid[row][col].getPosValues();
+            var string = "";
+            for(var r = 0; r < 9; r++)
+                string += (possArray[row][r] + " ");
+            console.log(string);
+        }
+    }
     return false;
 }
 
