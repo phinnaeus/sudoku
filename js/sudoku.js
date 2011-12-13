@@ -1,6 +1,3 @@
-// Import the sudokuNode.js file
-$("head").append("<script type='text/javascript' src='js/sudokuNode.js'></script>");
-
 /**
  * The grid of numbers that all the solving methods interact with.
  * Follows the format grid[ROW][COLUMN].
@@ -8,29 +5,6 @@ $("head").append("<script type='text/javascript' src='js/sudokuNode.js'></script
 var grid = new Array(9);        // create 9 rows
 for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
     grid[r] = new Array(9);
-}
-
-function randomShittyPuzzle() {
-    var cell = "";
-    var puzzle = genRow();
-    
-    clearPuzzle();
-
-    for (var i=1; i<10; i++) {
-        for (var j=1; j<10; j++) {
-            cell = ".r" + i + ".c" + j + " input";
-            if (rands() < 3) {
-                $(cell).val(puzzle[j-1]);
-                $(cell).attr("disabled", "disabled");
-            } else if (rands() < 2) {
-               // $(cell).next().text(rands() + " " + rands());
-            }
-        }
-        if (i%3 == 0) puzzle = offset(puzzle,1);
-        puzzle = offset(puzzle,3);
-    }
-    updateButtons();
-    updateProgressBar();
 }
 
 /**
@@ -904,33 +878,6 @@ function updateProgressBar() {
     return c;
 }
 
-function genRow() {
-    var puzzle = [7,3,1,8,4,2,9,5,6];
-    return shuffle(puzzle);
-}
-
-function rands() {
-    return Math.floor(Math.random() * 10);
-}
-
-function shuffle(o) {
-    for(var j, x, i = o.length; i; j = parseInt(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-    return o;
-}
-
-function offset(a,m) {
-    var len = a.length;
-    do {
-        var t = a[len-1];
-        for (var i=len-1; i>0; i--) {
-            a[i] = a[i-1];
-        }
-        a[0] = t;
-        m--;
-    } while (m > 0);
-    return a;
-}
-
 // Puzzle object constructor
 
 function Puzzle(puz, dis, pos) {
@@ -950,6 +897,26 @@ Storage.prototype.getObject = function(key, value) {
 }
 
 // test puzzles
+
+function grabPuzzle(difficulty) {
+    if (difficulty < 1 || difficulty > 4) return false;
+
+    var diffMap = ["", "m", "c", "h", "f"];
+
+    var posArr = new Array(81);
+    for (var i=0; i<81; i++) posArr[i] = "";
+    
+    var url = "testpuzzles/";
+    var num = Math.ceil(Math.random()*13);
+    url += diffMap[difficulty] + num + ".txt";
+
+    $.get(url, function(data) {
+        data = data.split("");
+        var puz = new Puzzle(data,puzToDisArray(data), posArr);
+        displayPuzzle(puz);
+    });
+}
+
 
 function puzToDisArray(puz) {
     var dis = new Array(81);

@@ -35,12 +35,12 @@
    <div id="middleCol"> 
         <div class="puzzleInfo" >
             <span id="puzzleNumber">00000000</span>
-            <span id="puzzleDifficulty">
+           <!--<span id="puzzleDifficulty">
                 <span class="difficultyOrbs off">&nbsp;</span>
                 <span class="difficultyOrbs on">&nbsp;</span>
                 <span class="difficultyOrbs on">&nbsp;</span>
                 <span class="difficultyOrbs on">&nbsp;</span>
-            </span>
+            </span>-->
         </div>
     <table id="puzzle">
         <tr>
@@ -474,17 +474,13 @@
     </div>
 
         <div id="rightMenu">
-            <button onclick="randomShittyPuzzle();"><span class="icon plus"></span>New</button>
-            <button onclick="notes();" class="hidden"><span class="icon tag"></span>Notes</button>
+            <button onclick="grabPuzzle(4);"><span class="icon plus"></span>New</button>
+            <!--<button onclick="notes();" class="hidden"><span class="icon tag"></span>Notes</button>-->
             <button onclick="step();" class="hidden"><span class="icon rightarrow"></span>Next</button>
             <button onclick="solve();" class="hidden positive"><span class="icon check"></span>Solve</button>
         </div>
 
     </div>
-
-    <select id="testSelect" style="display: none; position: absolute; bottom: 10px; right: 10px;">
-        <option>Dev Menu</option>
-    </select>
 
 	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
 
@@ -492,5 +488,6 @@
 		
 	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/sudoku.js"></script>
+    <script type="text/javascript" src="js/sudokuNode.js"></script>
 </body>
 </html>
