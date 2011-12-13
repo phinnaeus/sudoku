@@ -919,6 +919,7 @@ function getDifficulty() {
 function setDifficulty(diff) {
     try {
         localStorage.setItem("davistm+coleycj_diff",diff);
+        displayDifficulty(diff);
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
             alert("well, fuck. we ran out of room.");
@@ -929,7 +930,7 @@ function setDifficulty(diff) {
 function displayDifficulty(diff) {
     $(".difficultyOrbs").removeClass("on").addClass("off");
     for (; diff>=1; diff--) {
-        $("orb" + diff).addClass("on");
+        $("#orb" + diff).addClass("on");
     }
 }
 
