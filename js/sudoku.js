@@ -898,13 +898,15 @@ function puzzleToObject() {
 }
 
 function savePuzzle(puz) {
-    //TODO: check to see if "davistm+coleycj" exists in localStorage
-    //          if yes, popup confirm dialog about overwriting
-    //              if confirmed, save puzzle
-    //              if cancelled, return;;
-    //          if no, just save it
     try {
-        localStorage.setObject("davistm+coleycj",puz);
+        if (localStorage.getItem("davistm+coleycj") != null) {
+            apprise("You already have a puzzle saved. Do you want to overwrite it?",
+                {'verify':true},
+                function(result) {
+                    if (result) localStorage.setObject("davistm+coleycj",puz);
+                    else return false;
+                });
+        } else localStorage.setObject("davistm+coleycj",puz);
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
             alert("No more room for puzzles somehow! I'm sorry!");

@@ -1,5 +1,10 @@
 // JavaScript Document
 $(document).ready(function(){
+/*    var test = apprise("You already have a puzzle saved. Do you want to overwrite it?",
+               {'verify':true},
+               function(r) {
+                   alert(r);
+               });*/
 
     // User enters a value in a cell\
     $("#puzzle input").change(function() {
