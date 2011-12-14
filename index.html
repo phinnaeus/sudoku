@@ -27,7 +27,7 @@
             <button title="If you have a previously saved puzzle, you can load it here." onclick="displayPuzzle(loadPuzzle());">
                 <span class="icon uparrow"></span>Load</button>
             <!--<button><span class="icon pen"></span>Print</button>-->
-            <button class="hidden negative" title="Clears the puzzle board, allowing you to start fresh!" onclick="clearPuzzle();">
+            <button class="hidden negaction" title="Clears the puzzle board, allowing you to start fresh!" onclick="clearPuzzle();">
                 <span class="icon cross"></span>Clear</button>
         </div>
 
@@ -152,9 +152,9 @@
             <button title="Start from a pre-made puzzle. Select your desired difficulty on top of the puzzle." onclick="newButton();">
                 <span class="icon plus"></span>New</button>
             <!--<button onclick="notes();" class="hidden"><span class="icon tag"></span>Notes</button>-->
-            <button title="Solves a single cell for you." onclick="step();" class="hidden">
+            <button class="hidden" title="Solves a single cell for you." onclick="step();">
                 <span class="icon rightarrow"></span>Next</button>
-            <button title="Solve the rest of the puzzle. Only use this when you have complelety given up!" onclick="solve();" class="hidden positive">
+            <button class="hidden posaction" title="Solve the rest of the puzzle. Only use this when you have complelety given up!" onclick="solve();">
                 <span class="icon check"></span>Solve</button>
         </div>
 
