@@ -74,7 +74,10 @@ function step() {
             if(!scFlag) {
                 sbFlag = singlesInBox(true);
                 if(!sbFlag) {
-                    stuck = true;
+                    nprFlag = nakedPairInRow(true);
+                    if(!nprFlag) {
+                        stuck = true;
+                    }
                 }
             }
         }
@@ -134,9 +137,10 @@ function solve() {
         //$("p#log").text("Solved in " + solvingSteps + " steps");
         $("p#log").text("Solved in " + ((new Date().getTime() - seconds) / 1000) + " seconds");
     } else if(stuck) {
-        if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
+        bruteForce();
+       /* if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
             bruteForce();
-        }
+        }*/
     }
 }
 
@@ -518,15 +522,29 @@ function singlesInBox(step) {
     return flag;
 }
 
-function nakedPairInRow() {
-    var possArray = new Array(9)
+function nakedPairInRow(step) {
+    console.log("Trying nakedPairInRow");
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
-            possArray[row] = grid[row][col].getPosValues();
-            var string = "";
-            for(var r = 0; r < 9; r++)
-                string += (possArray[row][r] + " ");
-            console.log(string);
+            var possArray = new Array();
+            // Put the possibility array of all cells with 2 possible values into possArray
+            if(grid[row][col].howManyPossible() == 2) {
+                possArray[possArray.length] = grid[row][col].getPosValues();
+            }
+
+            // See if any of the 2 value tuples in possArray match
+            var matches = 0;
+            for(var x = 0; x < possArray.length - 1; x++) {
+                for(var y = x + 1; y < possArray.length; y++) {
+                    for(var z = 0; z < 9; z++) {
+                        if(possArray[x][z] == possArray[y][z])
+                            matches++;
+                    }
+                    if(matches == 9) {      // We have match
+                        console.log("Found a nakedPair at r" + (row + 1) + "c" + (col + 1));
+                    }
+                }
+            }
         }
     }
     return false;
@@ -650,6 +668,25 @@ function recursiveBacktracking(startingCol, startingRow) {
 }
 
 // Helpers #####################################################################
+
+function newButton() {
+    grabPuzzle(getDifficulty());
+    createGrid();
+}
+
+function isValidValue(col, row) {
+    console.log("in isValidValue");
+    var value = $("td.r" + (row + 1) + ".c" + (col + 1) + " input").val();
+    console.log(value);
+    console.log(grid[row][col].isPossible(value));
+    if(grid[row][col].isPossible(value)) {
+        console.log("return TRUE");
+        return true;
+    } else {
+        console.log("return FALSE");
+        return false;
+    }
+}
 
 /**
  * Toggles the visibility of the notes.

@@ -1,5 +1,18 @@
 // JavaScript Document
 $(document).ready(function(){
+
+    // User enters a value in a cell\
+    $("#puzzle input").change(function() {
+        var selector = $(this).parent().attr("class").split("");
+        console.log(selector[4] - 1, selector[1] - 1);
+        if(isValidValue(selector[4] - 1, selector[1] - 1)) {
+            console.log("Value is currently possible");
+            //TODO
+        } else {
+            console.log("Value is FUBAR");
+            //TODO highlightError()
+        }
+    });
     
     clearPuzzle();
 //    showButtons();
