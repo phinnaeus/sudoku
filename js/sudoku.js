@@ -785,6 +785,12 @@ function clearNotes() {
     }
 }
 
+function highlightError(row, col, eRow, eCol) {
+    if (row = eRow) highlightRow(row, col);
+    else if (col = eCol) highlighColumn(row, col);
+    else highlightBox(row, col);
+}
+
 function highlightRow(row, col) {
     clearPuzzleStyles();
     var rowSelector = "#puzzle .r" + row;
