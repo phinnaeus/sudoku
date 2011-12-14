@@ -17,10 +17,16 @@ $(document).ready(function(){
     clearPuzzle();
 //    showButtons();
     
-    $("#puzzle input").autotab_filter("numeric").autotab_magic().on('change', function() {
+    $("#puzzle input")
+        .autotab_filter({format: 'custom', pattern: '[^1-9]' })
+        .autotab_magic().on('change', function() {
         updateProgressBar();
         updateButtons();
     });
+
+    $("#leftMenu button[title]").tooltip({position: "center left", effect: "slide", direction: "left"});
+    $("#rightMenu button[title]").tooltip({position: "center right", effect: "slide", direction: "right"});
+    $(".difficultyOrbs[title]").tooltip({position: "top center", effect: "slide"});
 
     if (getDifficulty() == "") setDifficulty(4);
     else displayDifficulty(getDifficulty());

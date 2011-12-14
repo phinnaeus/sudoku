@@ -21,24 +21,28 @@
     <div id="container">
 
         <div id="leftMenu">
-            <button class="hidden" onclick="savePuzzle(puzzleToObject());"><span class="icon downarrow"></span>Save</button>
-            <button onclick="displayPuzzle(loadPuzzle());"><span class="icon uparrow"></span>Load</button>
+            <button class="hidden" title="Save your current puzzle and progress to your browser, if supported." onclick="savePuzzle(puzzleToObject());">
+                <span class="icon downarrow"></span>Save</button>
+            <button title="If you have a previously saved puzzle, you can load it here." onclick="displayPuzzle(loadPuzzle());">
+                <span class="icon uparrow"></span>Load</button>
             <!--<button><span class="icon pen"></span>Print</button>-->
-            <button class="hidden negative" onclick="clearPuzzle();"><span class="icon cross"></span>Clear</button>
+            <button class="hidden negative" title="Clears the puzzle board, allowing you to start fresh!" onclick="clearPuzzle();">
+                <span class="icon cross"></span>Clear</button>
         </div>
 
    <div id="middleCol"> 
         <div class="puzzleInfo" >
-            <span id="puzzleNumber">00000000</span>
+            <!--<span id="puzzleNumber">00000000</span>-->
             <span id="puzzleDifficulty">
-                <span id="orb1" class="difficultyOrbs" onclick="setDifficulty(1)"></span>
-                <span id="orb2" class="difficultyOrbs" onclick="setDifficulty(2)"></span>
-                <span id="orb3" class="difficultyOrbs" onclick="setDifficulty(3)"></span>
-                <span id="orb4" class="difficultyOrbs" onclick="setDifficulty(4)"></span>
+                <span id="orb1" class="difficultyOrbs" title="Easy puzzle, for little baby." onclick="setDifficulty(1)"></span>
+                <span id="orb2" class="difficultyOrbs" title="Medium Puzzle, for the novice." onclick="setDifficulty(2)"></span>
+                <span id="orb3" class="difficultyOrbs" title="Hard Puzzle, for veteran Russian." onclick="setDifficulty(3)"></span>
+                <span id="orb4" class="difficultyOrbs" title="Fiendish Puzzle, for professional sudokuist." onclick="setDifficulty(4)"></span>
             </span>
         </div>
     <table id="puzzle">
         <tr>
+<<<<<<< HEAD
             <td class="r1 c1 b1"><input type="text" maxlength="1" />
             </td>
             <td class="r1 c2 b1"><input type="text" maxlength="1" />
@@ -57,166 +61,105 @@
             </td>
             <td class="r1 c9 b3"><input type="text" maxlength="1" />
             </td>
+=======
+            <td class="r1 c1 b1"><input type="text" maxlength="1" /></td>
+            <td class="r1 c2 b1"><input type="text" maxlength="1" /></td>
+            <td class="r1 c3 b1"><input type="text" maxlength="1" /></td>
+            <td class="r1 c4 b2"><input type="text" maxlength="1" /></td>
+            <td class="r1 c5 b2"><input type="text" maxlength="1" /></td>
+            <td class="r1 c6 b2"><input type="text" maxlength="1" /></td>
+            <td class="r1 c7 b3"><input type="text" maxlength="1" /></td>
+            <td class="r1 c8 b3"><input type="text" maxlength="1" /></td>
+            <td class="r1 c9 b3"><input type="text" maxlength="1" /></td>
+>>>>>>> 409deb6765214aacfea02642ea6e1a0b4ab2be8b
         </tr>
         <tr>
-            <td class="r2 c1 b1"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c2 b1"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c3 b1"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c4 b2"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c5 b2"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c6 b2"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c7 b3"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c8 b3"><input type="text" maxlength="1" />
-            </td>
-            <td class="r2 c9 b3"><input type="text" maxlength="1" />
-            </td>
+            <td class="r2 c1 b1"><input type="text" maxlength="1" /></td>
+            <td class="r2 c2 b1"><input type="text" maxlength="1" /></td>
+            <td class="r2 c3 b1"><input type="text" maxlength="1" /></td>
+            <td class="r2 c4 b2"><input type="text" maxlength="1" /></td>
+            <td class="r2 c5 b2"><input type="text" maxlength="1" /></td>
+            <td class="r2 c6 b2"><input type="text" maxlength="1" /></td>
+            <td class="r2 c7 b3"><input type="text" maxlength="1" /></td>
+            <td class="r2 c8 b3"><input type="text" maxlength="1" /></td>
+            <td class="r2 c9 b3"><input type="text" maxlength="1" /></td>
         </tr>
         <tr>
-            <td class="r3 c1 b1"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c2 b1"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c3 b1"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c4 b2"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c5 b2"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c6 b2"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c7 b3"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c8 b3"><input type="text" maxlength="1" />
-            </td>
-            <td class="r3 c9 b3"><input type="text" maxlength="1" />
-            </td>
+            <td class="r3 c1 b1"><input type="text" maxlength="1" /></td>
+            <td class="r3 c2 b1"><input type="text" maxlength="1" /></td>
+            <td class="r3 c3 b1"><input type="text" maxlength="1" /></td>
+            <td class="r3 c4 b2"><input type="text" maxlength="1" /></td>
+            <td class="r3 c5 b2"><input type="text" maxlength="1" /></td>
+            <td class="r3 c6 b2"><input type="text" maxlength="1" /></td>
+            <td class="r3 c7 b3"><input type="text" maxlength="1" /></td>
+            <td class="r3 c8 b3"><input type="text" maxlength="1" /></td>
+            <td class="r3 c9 b3"><input type="text" maxlength="1" /></td>
+        </tr>        
+        <tr>
+            <td class="r4 c1 b4"><input type="text" maxlength="1" /></td>
+            <td class="r4 c2 b4"><input type="text" maxlength="1" /></td>
+            <td class="r4 c3 b4"><input type="text" maxlength="1" /></td>
+            <td class="r4 c4 b5"><input type="text" maxlength="1" /></td>
+            <td class="r4 c5 b5"><input type="text" maxlength="1" /></td>
+            <td class="r4 c6 b5"><input type="text" maxlength="1" /></td>
+            <td class="r4 c7 b6"><input type="text" maxlength="1" /></td>
+            <td class="r4 c8 b6"><input type="text" maxlength="1" /></td>
+            <td class="r4 c9 b6"><input type="text" maxlength="1" /></td>
         </tr>
         <tr>
-            <td class="r4 c1 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c2 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c3 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c4 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c5 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c6 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c7 b6"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c8 b6"><input type="text" maxlength="1" />
-            </td>
-            <td class="r4 c9 b6"><input type="text" maxlength="1" />
-            </td>
+            <td class="r5 c1 b4"><input type="text" maxlength="1" /></td>
+            <td class="r5 c2 b4"><input type="text" maxlength="1" /></td>
+            <td class="r5 c3 b4"><input type="text" maxlength="1" /></td>
+            <td class="r5 c4 b5"><input type="text" maxlength="1" /></td>
+            <td class="r5 c5 b5"><input type="text" maxlength="1" /></td>
+            <td class="r5 c6 b5"><input type="text" maxlength="1" /></td>
+            <td class="r5 c7 b6"><input type="text" maxlength="1" /></td>
+            <td class="r5 c8 b6"><input type="text" maxlength="1" /></td>
+            <td class="r5 c9 b6"><input type="text" maxlength="1" /></td>
         </tr>
         <tr>
-            <td class="r5 c1 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c2 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c3 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c4 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c5 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c6 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c7 b6"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c8 b6"><input type="text" maxlength="1" />
-            </td>
-            <td class="r5 c9 b6"><input type="text" maxlength="1" />
-            </td>
+            <td class="r6 c1 b4"><input type="text" maxlength="1" /></td>
+            <td class="r6 c2 b4"><input type="text" maxlength="1" /></td>
+            <td class="r6 c3 b4"><input type="text" maxlength="1" /></td>
+            <td class="r6 c4 b5"><input type="text" maxlength="1" /></td>
+            <td class="r6 c5 b5"><input type="text" maxlength="1" /></td>
+            <td class="r6 c6 b5"><input type="text" maxlength="1" /></td>
+            <td class="r6 c7 b6"><input type="text" maxlength="1" /></td>
+            <td class="r6 c8 b6"><input type="text" maxlength="1" /></td>
+            <td class="r6 c9 b6"><input type="text" maxlength="1" /></td>
         </tr>
         <tr>
-            <td class="r6 c1 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c2 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c3 b4"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c4 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c5 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c6 b5"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c7 b6"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c8 b6"><input type="text" maxlength="1" />
-            </td>
-            <td class="r6 c9 b6"><input type="text" maxlength="1" />
-            </td>
+            <td class="r7 c1 b7"><input type="text" maxlength="1" /></td>
+            <td class="r7 c2 b7"><input type="text" maxlength="1" /></td>
+            <td class="r7 c3 b7"><input type="text" maxlength="1" /></td>
+            <td class="r7 c4 b8"><input type="text" maxlength="1" /></td>
+            <td class="r7 c5 b8"><input type="text" maxlength="1" /></td>
+            <td class="r7 c6 b8"><input type="text" maxlength="1" /></td>
+            <td class="r7 c7 b9"><input type="text" maxlength="1" /></td>
+            <td class="r7 c8 b9"><input type="text" maxlength="1" /></td>
+            <td class="r7 c9 b9"><input type="text" maxlength="1" /></td>
         </tr>
         <tr>
-            <td class="r7 c1 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c2 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c3 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c4 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c5 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c6 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c7 b9"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c8 b9"><input type="text" maxlength="1" />
-            </td>
-            <td class="r7 c9 b9"><input type="text" maxlength="1" />
-            </td>
+            <td class="r8 c1 b7"><input type="text" maxlength="1" /></td>
+            <td class="r8 c2 b7"><input type="text" maxlength="1" /></td>
+            <td class="r8 c3 b7"><input type="text" maxlength="1" /></td>
+            <td class="r8 c4 b8"><input type="text" maxlength="1" /></td>
+            <td class="r8 c5 b8"><input type="text" maxlength="1" /></td>
+            <td class="r8 c6 b8"><input type="text" maxlength="1" /></td>
+            <td class="r8 c7 b9"><input type="text" maxlength="1" /></td>
+            <td class="r8 c8 b9"><input type="text" maxlength="1" /></td>
+            <td class="r8 c9 b9"><input type="text" maxlength="1" /></td>
         </tr>
         <tr>
-            <td class="r8 c1 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c2 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c3 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c4 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c5 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c6 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c7 b9"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c8 b9"><input type="text" maxlength="1" />
-            </td>
-            <td class="r8 c9 b9"><input type="text" maxlength="1" />
-            </td>
-        </tr>
-        <tr>
-            <td class="r9 c1 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c2 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c3 b7"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c4 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c5 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c6 b8"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c7 b9"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c8 b9"><input type="text" maxlength="1" />
-            </td>
-            <td class="r9 c9 b9"><input type="text" maxlength="1" />
-            </td>
+            <td class="r9 c1 b7"><input type="text" maxlength="1" /></td>
+            <td class="r9 c2 b7"><input type="text" maxlength="1" /></td>
+            <td class="r9 c3 b7"><input type="text" maxlength="1" /></td>
+            <td class="r9 c4 b8"><input type="text" maxlength="1" /></td>
+            <td class="r9 c5 b8"><input type="text" maxlength="1" /></td>
+            <td class="r9 c6 b8"><input type="text" maxlength="1" /></td>
+            <td class="r9 c7 b9"><input type="text" maxlength="1" /></td>
+            <td class="r9 c8 b9"><input type="text" maxlength="1" /></td>
+            <td class="r9 c9 b9"><input type="text" maxlength="1" /></td>
         </tr>
     </table>
 
@@ -226,10 +169,17 @@
     </div>
 
         <div id="rightMenu">
+<<<<<<< HEAD
             <button onclick="newButton();"><span class="icon plus"></span>New</button>
+=======
+            <button title="Start from a pre-made puzzle. Select your desired difficulty on top of the puzzle." onclick="grabPuzzle(getDifficulty());">
+                <span class="icon plus"></span>New</button>
+>>>>>>> 409deb6765214aacfea02642ea6e1a0b4ab2be8b
             <!--<button onclick="notes();" class="hidden"><span class="icon tag"></span>Notes</button>-->
-            <button onclick="step();" class="hidden"><span class="icon rightarrow"></span>Next</button>
-            <button onclick="solve();" class="hidden positive"><span class="icon check"></span>Solve</button>
+            <button title="Solves a single cell for you." onclick="step();" class="hidden">
+                <span class="icon rightarrow"></span>Next</button>
+            <button title="Solve the rest of the puzzle. Only use this when you have complelety given up!" onclick="solve();" class="hidden positive">
+                <span class="icon check"></span>Solve</button>
         </div>
 
     </div>
@@ -237,6 +187,7 @@
 	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
 
     <script type="text/javascript" src="js/jquery.autotab-1.1b.js"></script>
+    <script type="text/javascript" src="js/jquery.tools.min.js"></script>
 		
 	<script type="text/javascript" src="js/script.js"></script>
 	<script type="text/javascript" src="js/sudoku.js"></script>
