@@ -47,6 +47,16 @@ body {
     /*.vSpacer.overlay {
         margin-bottom: */
 
+.tooltip {
+    background: url("../images/white_arrow.png") repeat scroll 0 0 transparent;
+    color: #000;
+    text-align: center;
+    display: none;
+    font-size: 12px;
+    height: 70px;
+    padding: 25px;
+    width: 160px;
+}
 #mainLogo {
     height: 74px;
     width: 164px;

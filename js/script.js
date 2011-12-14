@@ -11,6 +11,10 @@ $(document).ready(function(){
         updateButtons();
     });
 
+    $("#leftMenu button[title]").tooltip({position: "center left", effect: "slide", direction: "left"});
+    $("#rightMenu button[title]").tooltip({position: "center right", effect: "slide", direction: "right"});
+    $(".difficultyOrbs[title]").tooltip({position: "top center", effect: "slide"});
+
     if (getDifficulty() == "") setDifficulty(4);
     else displayDifficulty(getDifficulty());
 	
