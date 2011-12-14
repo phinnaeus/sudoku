@@ -48,14 +48,34 @@ body {
         margin-bottom: */
 
 .tooltip {
-    background: url("../images/white_arrow.png") repeat scroll 0 0 transparent;
+    background: url("../images/white_arrow_down.png") no-repeat scroll 0 0 transparent;
     color: #000;
     text-align: center;
     display: none;
     font-size: 12px;
     height: 70px;
-    padding: 25px;
-    width: 160px;
+    padding: 24px 16px;
+    width: 170px;
+}
+.tooltipLeft {
+    background: url("../images/white_arrow_right.png") no-repeat scroll 0 0 transparent;
+    color: #000;
+    text-align: center;
+    display: none;
+    font-size: 12px;
+    height: 70px;
+    padding: 16px 30px 16px 16px;
+    width: 174px;
+}
+.tooltipRight {
+    background: url("../images/white_arrow_left.png") no-repeat scroll 0 0 transparent;
+    color: #000;
+    text-align: center;
+    display: none;
+    font-size: 12px;
+    height: 70px;
+    padding: 16px 16px 16px 30px;
+    width: 174px;
 }
 #mainLogo {
     height: 74px;
