@@ -1,6 +1,9 @@
 A Bit of Documentation
 ======================
 
+NOTE : I AM LAZY AND THIS IS OUT OF DATE.
+-----------------------------------------
+
 Puzzle Object Prototype
 -----------------------
 
