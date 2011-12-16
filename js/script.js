@@ -9,7 +9,9 @@ $(document).ready(function(){
     // User enters a value in a cell\
     $("#puzzle input").change(function() {
         var selector = $(this).parent().attr("class").split("");
-        console.log(selector[4] - 1, selector[1] - 1);
+        console.log(selector[1] - 1, selector[4] - 1);
+        console.log(typeof selector[1]);
+        console.log(typeof selector[4]);
         if(isValidValue(selector[4] - 1, selector[1] - 1)) {
             console.log("Value is currently possible");
             //TODO
