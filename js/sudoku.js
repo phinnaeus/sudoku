@@ -625,8 +625,9 @@ function recursiveBacktracking(startingCol, startingRow) {
     if(startingRow > 8) {
         for(var row = 0; row < 9; row++) {
             for(var col = 0; col < 9; col++) {
-                if($("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val() == "")
-                    $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(grid[row][col].getValue());
+                // Re-write every cell, even if it has a value already.
+                // This allows the algorithm to overwrite erroneous user input.
+                $("td.r" + (row + 1) + ".c" + (col + 1) + ">input").val(grid[row][col].getValue());
             }
         }
         updateProgressBar();
