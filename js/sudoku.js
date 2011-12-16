@@ -86,10 +86,14 @@ function step() {
         $("p#log").text("Solved in " + solvingSteps + " steps");
     }
     else if(stuck) {
-        if(confirm("Stuck! Brute force is needed. This will likely be fast, but may take up to a few minutes to complete")) {
+        apprise("Sorry, but we are stuck! We cannot solve any more cells stepwise; brute force is needed. This will likely be fast, but may take up to a few minutes to complete",
+        {"verify":true},
+        function (result) {
+            if (result) {
             clearNotes();
             bruteForce();
         }
+        });
     }
 }
 
@@ -669,7 +673,6 @@ function recursiveBacktracking(startingCol, startingRow) {
 function newButton() {
     clearGrid();
     grabPuzzle(getDifficulty());
-    disableInput();
     createGrid();
 }
 /*
@@ -912,8 +915,8 @@ function savePuzzle(puz) {
         } else localStorage.setObject("davistm+coleycj",puz);
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
-            alert("No more room for puzzles somehow! I'm sorry!");
-        } else alert(e);
+            apprise("No more room for puzzles somehow! I'm sorry!");
+        } else apprise("Error: " + e);
     }
     return true;
 }
@@ -987,8 +990,8 @@ function setDifficulty(diff) {
         displayDifficulty(diff);
     } catch (e) {
         if (e == QUOTA_EXCEEDED_ERR) {
-            alert("well, fuck. we ran out of room.");
-        } else alert(e);
+            apprise("THIS SHOULD NEVER EVER POP UP.");
+        } else apprise("Error: " + e);
     }
 }
 
