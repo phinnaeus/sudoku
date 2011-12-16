@@ -669,6 +669,7 @@ function recursiveBacktracking(startingCol, startingRow) {
 function newButton() {
     clearGrid();
     grabPuzzle(getDifficulty());
+    disableInput();
     createGrid();
 }
 /*
@@ -864,6 +865,9 @@ function updateCell(row, col, value) {
     return true;
 }
 
+function disableInput() {
+    $("#puzzle input").attr("disabled","disabled");
+}
 
 function displayPuzzle(puz) {
     clearPuzzle();
@@ -919,6 +923,10 @@ function loadPuzzle() {
     //          should fire an event on load if the key exits, or when something is saved.
     //          until that event fires, load button should be hidden
     var puzzle = localStorage.getObject("davistm+coleycj");
+    if (puzzle == null) {
+        apprise("You haven't saved a puzzle yet!");
+        return false;
+    }
     // have to do this to make the thing typeOf Puzzle
     return new Puzzle(puzzle.value, puzzle.isDisabled, puzzle.possibles);
 }
@@ -946,7 +954,7 @@ function countFilled() {
 }
 
 function updateProgressBar() {
-    var c = countFilled();
+    var c = countFilled() + 1;
     $("progress.puzzleInfo").val(c);
     return c;
 }
