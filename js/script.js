@@ -6,7 +6,7 @@ $(document).ready(function(){
                    alert(r);
                });*/
 
-    // User enters a value in a cell\
+/*    // User enters a value in a cell\
     $("#puzzle input").change(function() {
         var selector = $(this).parent().attr("class").split("");
         console.log(selector[1] - 1, selector[4] - 1);
@@ -19,7 +19,7 @@ $(document).ready(function(){
             console.log("Value is FUBAR");
             //TODO highlightError()
         }
-    });
+    });*/
     
     clearPuzzle();
 //    showButtons();

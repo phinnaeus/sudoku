@@ -12,7 +12,6 @@ for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
  * and fills the posVals array for each node.
  */
 function createGrid() {
-    console.log("Entering createGrid()");
     // Fill the grid with initial values
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
@@ -36,18 +35,15 @@ function createGrid() {
 
     //alertAllPos();
     //alertGrid();
-    console.log("Exiting createGrid()");
 }
 
 /**
  * Clears the grid by reinitializing the 1st dimension of the array
  */
 function clearGrid() {
-    console.log("Entering clearGrid()");
     for(var r = 0; r < 9; r++) {    // in every row, create 9 cells
         grid[r] = new Array(9);
     }
-    console.log("Exiting clearGrid()");
 }
 
 // Solving Styles ##############################################################
@@ -156,13 +152,11 @@ function solve() {
  * @param column = Column of the cell holding the value to be eliminated
  */
 function clearRow(column, row) {
-    console.log("Entering clearRow()");
     if(column >= 0 && column < 9 && row >= 0 && row < 9) {
         var value = grid[row][column].getValue();
         for(var i = 0; i < 9; i++)
             grid[row][i].setNotPossible(value);
     }
-    console.log("Exiting clearRow()");
 }
 
 /**
@@ -172,13 +166,11 @@ function clearRow(column, row) {
  * @param column = Column of the cell holding the value to be eliminated
  */
 function clearColumn(column, row) {
-    console.log("Entering clearColumn()");
     if(column >= 0 && column < 9 && row >= 0 && row < 9) {
         var value = grid[row][column].getValue();
         for(var i = 0; i < 9; i++)
             grid[i][column].setNotPossible(value);
     }
-    console.log("Exiting clearColumn()");
 }
 
 /**
@@ -188,7 +180,6 @@ function clearColumn(column, row) {
  * @param column = Column of the cell holding the value to be eliminated
  */
 function clearBox(column, row) {
-    console.log("Entering clearBox()");
     if(column >= 0 && column < 9 && row >= 0 && row < 9) {
         var value = grid[row][column].getValue();
         var rOffset = 3 * Math.floor(row / 3);
@@ -200,7 +191,6 @@ function clearBox(column, row) {
 
         }
     }
-    console.log("Exiting clearBox()");
 }
 
 /**
@@ -212,14 +202,11 @@ function clearBox(column, row) {
  * @return FALSE if num conflicts with other cells in row, TRUE otherwise.
  */
 function checkRow(row, num) {
-    console.log("Entering checkRow()");
     for(var col = 0; col < 9; col++) {
         if(grid[row][col].getValue() == num) {
-            console.log("Returning FALSE from checkRow()");
             return false;
         }
     }
-    console.log("Returning TRUE from checkRow()");
     return true;
 }
 
@@ -232,14 +219,11 @@ function checkRow(row, num) {
  * @return FALSE if num conflicts with other cells in column, TRUE otherwise
  */
 function checkColumn(col, num) {
-    console.log("Entering checkColumn()");
     for(var row = 0; row < 9; row++) {
         if(grid[row][col].getValue() == num) {
-            console.log("Returning FALSE from checkColumn()");
             return false;
         }
     }
-    console.log("Returning TRUE from checkColumn()");
     return true;
 }
 
@@ -253,19 +237,16 @@ function checkColumn(col, num) {
  * @return FALSE if num conflicts with other cells in box, TRUE otherwise.
  */
 function checkBox(col, row, num) {
-    console.log("Entering checkBox");
     var bCol = 3 * Math.floor(col / 3);
     var bRow = 3 * Math.floor(row / 3);
 
     for(var r = 0; r < 3; r++) {
         for(var c = 0; c < 3; c++) {
             if(grid[bRow + r][bCol + c].getValue() == num) {
-                console.log("Returning FALSE from checkBox()");
                 return false;
             }
         }
     }
-    console.log("Returning TRUE from checkBox()");
     return true;
 }
 
@@ -277,7 +258,6 @@ function checkBox(col, row, num) {
  * @return TRUE if all 81 cells have values, FALSE otherwise.
  */
 function isSolved() {
-    console.log("Entering isSolved()");
     var count = 0;
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
@@ -285,7 +265,6 @@ function isSolved() {
                 count++;
         }
     }
-    console.log("Returning " + (count == 81) + " from isSolved()");
     return count == 81;
 }
 
@@ -293,7 +272,6 @@ function isSolved() {
  * Displays an alert box with all the values of the sudoku puzzle
  */
 function alertGrid() {
-    console.log("Entering alertGrid()");
     var string = "    A B C D E F G H I";
     for(var row = 0; row < 9; row++) {
         var rowString = "\n" + (row + 1) + ":";
@@ -307,7 +285,6 @@ function alertGrid() {
         string += rowString;
     }
     console.log(string);
-    console.log("Exiting alertGrid()");
 }
 
 /**
@@ -315,7 +292,6 @@ function alertGrid() {
  * cells.
  */
 function alertAllPos() {
-    console.log("Entering alertAllPos()");
     var string = "CELL | # | POSSIBILITIES";
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
@@ -330,7 +306,6 @@ function alertAllPos() {
         }
     }
     console.log(string);
-    console.log("Exiting alertAllPos()");
 }
 
 // Solvers #####################################################################
@@ -343,7 +318,6 @@ function alertAllPos() {
  * @returns TRUE if method solves any cells, FALSE otherwise
  */
 function nakedSingles(step) {
-    console.log("Entering nakedSingles()");
     var flag = false;
 
     clearPuzzleStyles();
@@ -366,7 +340,6 @@ function nakedSingles(step) {
                         $("p#log").text("r" + (row + 1) + "c" + (col + 1) + " solved with nakedSingles()");
                         if(step) {
                             updateNotes(col, row);
-                            console.log("Returning " + flag + " from nakedSingles()");
                             return flag;
                         }
                     }
@@ -374,7 +347,6 @@ function nakedSingles(step) {
             }
         }
     }
-    console.log("Returning " + flag + " from nakedSingles()");
     return flag;
 }
 
@@ -548,7 +520,6 @@ function singlesInBox(step) {
 }
 
 function nakedPairInRow(step) {
-    console.log("Entering nakedPairInRow()");
     var flag = false;
 /*    for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
@@ -573,7 +544,6 @@ function nakedPairInRow(step) {
             }
         }
     }*/
-    console.log("Returning " + flag + " from nakedPairInRow()");
     return flag;
 }
 
@@ -626,14 +596,12 @@ function hiddenTripletInBox() {
  * recursiveBacktracking() is currently the only method it uses.
  */
 function bruteForce() {
-    console.log("Entering bruteForce()");
     var startTime = new Date().getTime();
     try {
         recursiveBacktracking(0,0);
     } catch(e) {
         $("p#log").html("Puzzle solved in " + ((new Date().getTime() - startTime) / 1000) + " seconds" + "<br />" + e + " recursions were required to solve");   
     }
-    console.log("Exiting bruteForce()");
 }
 
 var numRecursions = 0;      // Counter for recursiveBacktracking()
@@ -649,7 +617,6 @@ var numRecursions = 0;      // Counter for recursiveBacktracking()
  * @param startingRow The starting row for the net step in the recursion
  */
 function recursiveBacktracking(startingCol, startingRow) {
-    console.log("Entering recursiveBacktracking()");
     var flag = false;
 
     numRecursions++;        // increment the counter
@@ -694,22 +661,18 @@ function recursiveBacktracking(startingCol, startingRow) {
             grid[startingRow][startingCol].setValue(0);
         }
     }
-    console.log("Returning " + flag + " from recursiveBacktracking()");
     return flag;
 }
 
 // Helpers #####################################################################
 
 function newButton() {
-    console.log("Entering newButton()");
     clearGrid();
     grabPuzzle(getDifficulty());
     createGrid();
-    console.log("Exiting newButton()");
 }
-
+/*
 function isValidValue(col, row) {
-    console.log("Entering isValidValue()");
     var value = $("td.r" + (row + 1) + ".c" + (col + 1) + " input").val();
     console.log(value);
     console.log("TypeOf ROW: " + typeof row);
@@ -717,13 +680,11 @@ function isValidValue(col, row) {
     console.log("TypeOf grid[row][col]: " + typeof grid[row][col]);
     console.log("TypeOf grid[0][0]: " + typeof grid[0]);
     if(grid[row][col].isPossible(value)) {
-        console.log("Returning TRUE from isValidValue()");
         return true;
     } else {
-        console.log("Returning FALSE from isValidValue()");
         return false;
     }
-}
+}*/
 
 /**
  * Toggles the visibility of the notes.
@@ -731,7 +692,6 @@ function isValidValue(col, row) {
  */
 var notesVisible = false;
 function notes() {
-    console.log("Entering notes()");
     if(notesVisible) {
         notesVisible = false;
         clearNotes();
@@ -740,7 +700,6 @@ function notes() {
         notesVisible = true;
         createNotes();
     }
-    console.log("Exiting notes()");
 }
 
 /**
@@ -748,7 +707,6 @@ function notes() {
  * Creates the grid array if it doesn't exist.
  */
 function createNotes() {
-    console.log("Entering createNotes()");
     // Create the grid if it doesn't already exist
     if(typeof grid[0][0] === "undefined") {
         createGrid();
@@ -767,7 +725,6 @@ function createNotes() {
     }
 
     alertAllPos();
-    console.log("Exiting createNotes()");
 }
 
 /**
@@ -778,7 +735,6 @@ function createNotes() {
  * @param row The row of the cell that was updated
  */
 function updateNotes(col, row) {
-    console.log("Entering updateNotes()");
     if(notesVisible) {
         var value = grid[row][col].getValue();
     
@@ -813,29 +769,24 @@ function updateNotes(col, row) {
             }
         }
     }
-    console.log("Exiting updateNotes()");
 }
 
 /**
  * Clear the notes from all cells
  */
 function clearNotes() {
-    console.log("Entering clearNotes()");
     for(var row = 0; row < 9; row++) {
         for(var col = 0; col < 9; col++) {
             for(var i = 1; i < 10; i++)
                 $("td.r" + (row + 1) + ".c" + (col + 1) + " span.possibles" + i).html("&nbsp;");
         }
     }
-    console.log("Exiting clearNotes()");
 }
 
 function highlightError(row, col, eRow, eCol) {
-    console.log("Entering highlightError()");
     if (row = eRow) highlightRow(row, col);
     else if (col = eCol) highlighColumn(row, col);
     else highlightBox(row, col);
-    console.log("Exiting highlightError()");
 }
 
 function highlightRow(row, col) {
@@ -873,33 +824,27 @@ function highlightBox(row, col) {
 }
 
 function clearPuzzleStyles() {
-    console.log("Entering clearPuzzleStyles()");
     $("#puzzle td").removeAttr("style");
-    console.log("Exiting clearPuzzleStyles()");
 }
 
 function clearPuzzle() {
-    console.log("Entering clearPuzzle()");
     $("#puzzle input").val("").removeAttr("disabled").next().text("");
     clearPuzzleStyles();
     updateButtons();
     updateProgressBar();
 
     // Reset all necessary backend stuff
-    //clearGrid();
+    clearGrid();
     $("#log").text("");
     numRecursions = 0;
-    console.log("Exiting clearPuzzle()");
 }
 
 function updateButtons() {
-    console.log("Entering updateButtons()");
     var data = countFilled();
     if (data > 0) {
         showButtons();
     } else hideButtons();
 
-    console.log("Exiting updateButtons()");
 }
 
 function showButtons() {
@@ -921,7 +866,6 @@ function updateCell(row, col, value) {
 
 
 function displayPuzzle(puz) {
-    console.log("Entering displayPuzzle()");
     clearPuzzle();
     $("#puzzle input").each(function(index) {
         var num = puz.value[index];
@@ -932,11 +876,9 @@ function displayPuzzle(puz) {
     });
     updateButtons();
     updateProgressBar();
-    console.log("Exiting displayPuzzle()");
 }    
 
 function puzzleToObject() {
-    console.log("Entering puzzleToObject()");
     var i=0;
     var puz = new Array(81);
     var dis = new Array(81);
@@ -951,7 +893,6 @@ function puzzleToObject() {
         dis[i] = $(this).attr("disabled");
         i++;
     });
-    console.log("Returning new Puzzle() object from puzzleToObject()");
     return new Puzzle(puz, dis, pos);
 }
 
@@ -983,49 +924,39 @@ function loadPuzzle() {
 }
 
 function setPossible(row, col, pos) {
-    console.log("Entering setPossible()");
     var cellSelector = "#puzzle .r" + row + ".c" + col + " span.possibles";
     $(cellSelector).text(pos);
-    console.log("Exiting setPossible()");
 }
 
 function appendPossible(row, col, pos) {
-    console.log("Entering appendPossible()");
     var cellSelector = "#puzzle .r" + row + ".c" + col + " span.possibles";
     var cellObj = $(cellSelector)
     var cur = cellObj.text();
     if (cur == null) cellObj.text(pos);
     if (cur < pos) cellObj.text(cur + " " + pos);
     else cellObj.text(pos + " " + cur);
-    console.log("Exiting appendPossible()");
 }
 
 function countFilled() {
-    console.log("Entering countFilled()");
     var c=0;
     $("#puzzle input").each(function() {
         if ($(this).val() != "") c++;
     });
-    console.log("Returning " + c + " from countFilled()");
     return c;
 }
 
 function updateProgressBar() {
-    console.log("Entering updateProgressBar()");
     var c = countFilled();
     $("progress.puzzleInfo").val(c);
-    console.log("Returning updateProgressBar()");
     return c;
 }
 
 // Puzzle object constructor
 
 function Puzzle(puz, dis, pos) {
-    console.log("Entering Puzzle()");
     this.value = puz;
     this.isDisabled = dis;
     this.possibles = pos;
-    console.log("Exiting Puzzle()");
 }
 
 // localStorage only stores strings. Fuck that.
@@ -1054,20 +985,16 @@ function setDifficulty(diff) {
 }
 
 function displayDifficulty(diff) {
-    console.log("Entering displayDifficulty()");
     $(".difficultyOrbs").removeClass("on").addClass("off");
     for (; diff>=1; diff--) {
         $("#orb" + diff).addClass("on");
     }
-    console.log("Exiting displayDifficulty()");
 }
 
 // test puzzles
 
 function grabPuzzle(difficulty, id) {
-    console.log("Entering grabPuzzle()");
     if (difficulty < 1 || difficulty > 4 || id < 1 || id > 13) {
-        console.log("Returning FALSE from grabPuzzle()");
         return false;
     }
 
@@ -1087,17 +1014,14 @@ function grabPuzzle(difficulty, id) {
         var puz = new Puzzle(data,puzToDisArray(data), posArr);
         displayPuzzle(puz);
     });
-    console.log("Exiting grabPuzzle()");
 }
 
 
 function puzToDisArray(puz) {
-    console.log("Entering puzToDisArray()");
     var dis = new Array(81);
     for (var i=0; i<81; i++) {
         dis[i] = false;
         if (puz[i] != "0") dis[i] = true;
     }
-    console.log("Returning 'dis' array from puzToDisArray()");
     return dis;
 }
